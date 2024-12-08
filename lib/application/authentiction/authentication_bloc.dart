@@ -1,17 +1,18 @@
 import 'package:bloc/bloc.dart';
-import 'package:omen/Service/APIService.dart';
-import 'package:omen/domain/user.dart';
-import 'package:omen/domain/user_reginster_login_dto.dart';
+import 'package:faleh_hafez/Service/APIService.dart';
+import 'package:faleh_hafez/domain/user.dart';
+import 'package:faleh_hafez/domain/user_reginster_login_dto.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 // import 'package:hive_flutter/hive_flutter.dart';
 // import 'package:meta/meta.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
-List<UserRegisterLoginDTO> userList = [];
-
 late final String? errorText;
+
+final box = Hive.box('mybox');
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -40,7 +41,7 @@ class AuthenticationBloc
         // );
       } catch (e) {
         emit(
-          AuthenticationError(errorText: e.toString().split(":")[1]),
+          AuthenticationError(errorText: e.toString()),
         );
       }
     });
@@ -54,12 +55,18 @@ class AuthenticationBloc
           event.user.password,
         );
 
+        // box.put('userID', response.id);
+        // box.put('userMobile', response.mobileNumber);
+        // box.put('userToken', response.token);
+        // box.put('userType', response.type);
+        print(response.mobileNumber);
+
         emit(
           AuthenticationLoginSuccess(user: response),
         );
       } catch (e) {
         emit(
-          AuthenticationError(errorText: e.toString().split(":")[1]),
+          AuthenticationError(errorText: e.toString()),
         );
       }
     });

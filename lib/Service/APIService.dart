@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:omen/domain/massage_dto.dart';
-import 'package:omen/domain/user.dart';
-import 'package:omen/domain/user_chat_dto.dart';
+import 'package:faleh_hafez/domain/massage_dto.dart';
+import 'package:faleh_hafez/domain/user.dart';
+import 'package:faleh_hafez/domain/user_chat_dto.dart';
 import 'package:http/http.dart' as http;
 
 class APIService {
@@ -22,6 +22,9 @@ class APIService {
       );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
+        // localStorage colling && save user details
+        // final box = Hive.box('mybox');
+
         return response.body;
       } else {
         throw Exception(response.body);
@@ -50,6 +53,7 @@ class APIService {
           token: bodyContent["token"],
           type: bodyContent["type"],
         );
+
         return user;
       } else {
         throw Exception(response.body);

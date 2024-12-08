@@ -1,9 +1,9 @@
-import 'package:omen/application/chat_theme_changer/chat_theme_changer_bloc.dart';
-import 'package:omen/application/theme_changer/theme_changer_bloc.dart';
-import 'package:omen/domain/user.dart';
-import 'package:omen/presentation/home/home_page.dart';
-import 'package:omen/presentation/messenger/components/drawer_chat_item.dart';
-import 'package:omen/presentation/messenger/pages/login%20&%20register/login_page_chat.dart';
+import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
+import 'package:faleh_hafez/application/theme_changer/theme_changer_bloc.dart';
+import 'package:faleh_hafez/domain/user.dart';
+import 'package:faleh_hafez/presentation/home/home_page.dart';
+import 'package:faleh_hafez/presentation/messenger/components/drawer_chat_item.dart';
+import 'package:faleh_hafez/presentation/messenger/pages/login%20&%20register/login_page_chat.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

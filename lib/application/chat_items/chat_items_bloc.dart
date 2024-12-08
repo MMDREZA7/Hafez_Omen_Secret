@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:omen/Service/APIService.dart';
-import 'package:omen/domain/user_chat_dto.dart';
+import 'package:faleh_hafez/Service/APIService.dart';
+import 'package:faleh_hafez/domain/user_chat_dto.dart';
 import 'package:meta/meta.dart';
 
 part 'chat_items_event.dart';

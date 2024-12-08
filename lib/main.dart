@@ -1,10 +1,10 @@
-import 'package:omen/application/authentiction/authentication_bloc.dart';
-import 'package:omen/application/chat_theme_changer/chat_theme_changer_bloc.dart';
-import 'package:omen/application/omen_list/omen_list_bloc.dart';
-import 'package:omen/application/theme_changer/theme_changer_bloc.dart';
-import 'package:omen/presentation/home/home_page.dart';
-import 'package:omen/presentation/home/components/splash_page.dart';
-import 'package:omen/presentation/themes/theme.dart';
+import 'package:faleh_hafez/application/authentiction/authentication_bloc.dart';
+import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
+import 'package:faleh_hafez/application/omen_list/omen_list_bloc.dart';
+import 'package:faleh_hafez/application/theme_changer/theme_changer_bloc.dart';
+import 'package:faleh_hafez/presentation/home/home_page.dart';
+import 'package:faleh_hafez/presentation/home/components/splash_page.dart';
+import 'package:faleh_hafez/presentation/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';

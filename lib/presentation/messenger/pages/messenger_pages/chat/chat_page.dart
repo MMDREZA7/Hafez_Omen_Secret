@@ -1,4 +1,4 @@
-import 'package:omen/domain/user_chat_dto.dart';
+import 'package:faleh_hafez/domain/user_chat_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +15,7 @@ class ChatPage extends StatelessWidget {
   final bool isNewChat;
 
   const ChatPage({
-    Key? key,
+    super.key,
     required this.hostPublicID,
     required this.guestPublicID,
     required this.name,
@@ -25,7 +25,7 @@ class ChatPage extends StatelessWidget {
     required this.myID,
     required this.userChatItemDTO,
     this.isNewChat = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

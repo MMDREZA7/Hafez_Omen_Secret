@@ -1,11 +1,12 @@
-import 'package:omen/application/chat_items/chat_items_bloc.dart';
-import 'package:omen/domain/user.dart';
-import 'package:omen/domain/user_chat_dto.dart';
-import 'package:omen/presentation/messenger/components/drawer_chat.dart';
-import 'package:omen/presentation/messenger/pages/messenger_pages/chat/chat_page.dart';
+import 'package:faleh_hafez/application/chat_items/chat_items_bloc.dart';
+import 'package:faleh_hafez/domain/user.dart';
+import 'package:faleh_hafez/domain/user_chat_dto.dart';
+import 'package:faleh_hafez/presentation/messenger/components/drawer_chat.dart';
+import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/chat_page.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class HomePageChats extends StatefulWidget {
   final User user;
@@ -18,11 +19,41 @@ class HomePageChats extends StatefulWidget {
 
 class _HomePageChatsState extends State<HomePageChats> {
   late final TextEditingController _receiverUserIDController;
+  final box = Hive.box('mybox');
+  var userProfile = User(
+    id: 'id',
+    mobileNumber: 'mobileNumber',
+    token: 'token',
+    type: 'type',
+  );
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
     _receiverUserIDController = TextEditingController();
+
+    // final String id = await box.get('userID');
+    // final String mobileNumber = await box.get('userMobile');
+    // final String token = await box.get('userToken');
+    // final String type = await box.get('userType');
+
+    // context.showSuccessBar(
+    //   content: Column(
+    //     children: [
+    //       Text("ID: ${id}"),
+    //       Text("Mobile: ${mobileNumber}"),
+    //       Text("Type: ${token}"),
+    //       Text("Token: ${type}"),
+    //     ],
+    //   ),
+    // );
+
+    // userProfile = User(
+    //   id: id,
+    //   mobileNumber: mobileNumber,
+    //   token: token,
+    //   type: type,
+    // );
   }
 
   @override
@@ -61,7 +92,7 @@ class _HomePageChatsState extends State<HomePageChats> {
             }),
           ],
         ),
-        drawer: DrawerHomeChat(user: widget.user),
+        drawer: DrawerHomeChat(user: userProfile),
         body: BlocBuilder<ChatItemsBloc, ChatItemsState>(
           builder: (context, state) {
             if (state is ChatItemsLoading) {

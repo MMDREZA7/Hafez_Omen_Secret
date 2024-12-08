@@ -1,6 +1,6 @@
-import 'package:omen/constants.dart';
-import 'package:omen/domain/massage_dto.dart';
-import 'package:omen/domain/user_chat_dto.dart';
+import 'package:faleh_hafez/constants.dart';
+import 'package:faleh_hafez/domain/massage_dto.dart';
+import 'package:faleh_hafez/domain/user_chat_dto.dart';
 
 import '../../../../../../application/messaging/bloc/messaging_bloc.dart';
 import 'package:flutter/material.dart';

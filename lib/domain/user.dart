@@ -2,7 +2,7 @@ class User {
   final String id;
   final String mobileNumber;
   final String token;
-  final int type;
+  final String type;
 
   User({
     required this.id,

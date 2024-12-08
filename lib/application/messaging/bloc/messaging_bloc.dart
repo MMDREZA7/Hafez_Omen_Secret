@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:omen/Service/APIService.dart';
-import 'package:omen/domain/massage_dto.dart';
+import 'package:faleh_hafez/Service/APIService.dart';
+import 'package:faleh_hafez/domain/massage_dto.dart';
 import 'package:equatable/equatable.dart';
 part 'messaging_event.dart';
 part 'messaging_state.dart';
