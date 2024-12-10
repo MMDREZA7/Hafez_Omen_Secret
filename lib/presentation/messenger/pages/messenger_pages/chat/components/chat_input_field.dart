@@ -15,7 +15,7 @@ class ChatInputField extends StatefulWidget {
   final String token;
   // final ScrollController scrollControllerForMessagesList;
 
-  ChatInputField({
+  const ChatInputField({
     Key? key,
     required this.hostPublicID,
     required this.guestPublicID,
