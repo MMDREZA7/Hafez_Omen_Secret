@@ -64,11 +64,14 @@ class _DrawerHomeChatState extends State<DrawerHomeChat> {
                       ClipboardData(
                         text: widget.user.id,
                       ),
-                    ).then((_) {
-                      context.showInfoBar(
-                        content: const Text('Your ID copied to clipboard ;)'),
-                      );
-                    });
+                    ).then(
+                      (_) {
+                        // ignore: use_build_context_synchronously
+                        context.showInfoBar(
+                          content: const Text('Your ID copied to clipboard ;)'),
+                        );
+                      },
+                    );
                   },
                   icon: Icon(
                     Icons.copy,

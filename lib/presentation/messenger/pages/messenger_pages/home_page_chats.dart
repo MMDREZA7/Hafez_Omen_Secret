@@ -18,49 +18,42 @@ class HomePageChats extends StatefulWidget {
 }
 
 class _HomePageChatsState extends State<HomePageChats> {
-  late final TextEditingController _receiverUserIDController;
+  final TextEditingController _receiverUserIDController =
+      TextEditingController();
   final box = Hive.box('mybox');
   var userProfile = User(
     id: 'id',
     mobileNumber: 'mobileNumber',
     token: 'token',
-    type: 'type',
+    type: UserType.Guest,
   );
-
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    _receiverUserIDController = TextEditingController();
 
-    // final String id = await box.get('userID');
-    // final String mobileNumber = await box.get('userMobile');
-    // final String token = await box.get('userToken');
-    // final String type = await box.get('userType');
+    final String id = box.get('userID');
+    final String mobileNumber = box.get('userMobile');
+    final String token = box.get('userToken');
+    // ignore: unused_local_variable
+    final String type = box.get('userType') == null ? '' : box.get("userType");
 
-    // context.showSuccessBar(
-    //   content: Column(
-    //     children: [
-    //       Text("ID: ${id}"),
-    //       Text("Mobile: ${mobileNumber}"),
-    //       Text("Type: ${token}"),
-    //       Text("Token: ${type}"),
-    //     ],
-    //   ),
-    // );
+    // var typeInt = int.tryParse(type);
 
-    // userProfile = User(
-    //   id: id,
-    //   mobileNumber: mobileNumber,
-    //   token: token,
-    //   type: type,
-    // );
+    userProfile = User(
+      id: id,
+      mobileNumber: mobileNumber,
+      token: token,
+      type: UserType.Guest,
+      // type: typeInt[userTypeConvertToEnum],
+      // type: typeInt[userTypeConvertToEnum],
+    );
   }
 
-  @override
-  void dispose() {
-    _receiverUserIDController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _receiverUserIDController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

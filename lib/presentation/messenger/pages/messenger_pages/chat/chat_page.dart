@@ -85,7 +85,7 @@ class ChatPage extends StatelessWidget {
                   } else if (state is MessagingLoaded) {
                     return Text(
                       userChatItemDTO.participant1MobileNumber,
-                      style: TextStyle(fontSize: 15),
+                      style: const TextStyle(fontSize: 15),
                     );
                   } else {
                     return const Text(

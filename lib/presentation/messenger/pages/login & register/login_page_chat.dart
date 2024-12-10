@@ -134,7 +134,7 @@ class _LoginPageMessengerState extends State<LoginPageMessenger> {
 
                     const SizedBox(height: 25),
                     BlocConsumer<AuthenticationBloc, AuthenticationState>(
-                      listener: (context, state) {
+                      listener: (context, state) async {
                         if (state is AuthenticationLoginSuccess) {
                           Navigator.pushReplacement(
                             context,

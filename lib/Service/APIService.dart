@@ -51,7 +51,7 @@ class APIService {
           id: bodyContent["id"],
           mobileNumber: bodyContent["mobileNumber"],
           token: bodyContent["token"],
-          type: bodyContent["type"],
+          type: userTypeConvertToEnum[bodyContent["type"]]!,
         );
 
         return user;
@@ -168,6 +168,9 @@ class APIService {
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         var message = json.decode(response.body);
+
+        print(
+            "messageeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee: ${message}");
 
         return message;
       } else {

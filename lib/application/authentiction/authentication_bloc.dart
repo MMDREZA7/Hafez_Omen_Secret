@@ -51,15 +51,14 @@ class AuthenticationBloc
 
       try {
         final response = await APIService().loginUser(
-          event.user.mobileNumber,
-          event.user.password,
+          event.user.mobileNumber.toString(),
+          event.user.password.toString(),
         );
 
         // box.put('userID', response.id);
         // box.put('userMobile', response.mobileNumber);
         // box.put('userToken', response.token);
         // box.put('userType', response.type);
-        print(response.mobileNumber);
 
         emit(
           AuthenticationLoginSuccess(user: response),
