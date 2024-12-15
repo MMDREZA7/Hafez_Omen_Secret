@@ -154,6 +154,53 @@ class _MyDrawerState extends State<MyDrawer> {
                             ),
                             border: InputBorder.none,
                           ),
+                          onEditingComplete: () {
+                            if (_searchController.text == '786') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (context) => AuthenticationBloc(),
+                                    child: MaterialApp(
+                                      theme: secretPageTheme,
+                                      home: BlocProvider(
+                                        create: (context) =>
+                                            ChatThemeChangerBloc()
+                                              ..add(FirstTimeOpenChat()),
+                                        child: const LoginPageMessenger(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              if (_searchController.text.isNotEmpty) {
+                                context.read<OmenListBloc>().add(
+                                      OmenListShowOmenEvent(),
+                                    );
+
+                                Navigator.pop(context);
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => const AlertDialog(
+                                    backgroundColor: Colors.red,
+                                    content: Directionality(
+                                      textDirection: TextDirection.rtl,
+                                      child: Text(
+                                        'لطفا عددی وارد کنید',
+                                        style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                          },
                         ),
                       ),
                     ),
@@ -182,7 +229,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           MaterialButton(
                             color: Theme.of(context).colorScheme.onPrimary,
                             onPressed: () {
-                              if (_searchController.text == '159') {
+                              if (_searchController.text == '786') {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

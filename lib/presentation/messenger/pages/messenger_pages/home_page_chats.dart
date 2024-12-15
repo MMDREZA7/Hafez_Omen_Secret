@@ -1,4 +1,5 @@
 import 'package:faleh_hafez/application/chat_items/chat_items_bloc.dart';
+import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
 import 'package:faleh_hafez/domain/user.dart';
 import 'package:faleh_hafez/domain/user_chat_dto.dart';
 import 'package:faleh_hafez/presentation/messenger/components/drawer_chat.dart';
@@ -35,15 +36,17 @@ class _HomePageChatsState extends State<HomePageChats> {
     final String mobileNumber = box.get('userMobile');
     final String token = box.get('userToken');
     // ignore: unused_local_variable
-    final String type = box.get('userType') == null ? '' : box.get("userType");
+    final String type = box.get('userType');
 
     // var typeInt = int.tryParse(type);
+
+    var userType = int.parse(type);
 
     userProfile = User(
       id: id,
       mobileNumber: mobileNumber,
       token: token,
-      type: UserType.Guest,
+      type: userTypeConvertToEnum[userType]!,
       // type: typeInt[userTypeConvertToEnum],
       // type: typeInt[userTypeConvertToEnum],
     );
@@ -181,6 +184,8 @@ class _HomePageChatsState extends State<HomePageChats> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+            _receiverUserIDController.clear();
+
             showDialog(
               context: context,
               builder: (context) => Dialog(
@@ -195,51 +200,84 @@ class _HomePageChatsState extends State<HomePageChats> {
                         style: TextStyle(fontSize: 25),
                       ),
                       const SizedBox(height: 20),
-                      TextField(
+                      TextFormField(
                         decoration:
                             const InputDecoration(labelText: 'Receiver ID'),
                         controller: _receiverUserIDController,
+                        onEditingComplete: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatPage(
+                                token: widget.user.token,
+                                chatID: '',
+                                hostPublicID: widget.user.id,
+                                guestPublicID: _receiverUserIDController.text,
+                                name: '',
+                                isGuest: true,
+                                myID: widget.user.id,
+                                userChatItemDTO: UserChatItemDTO(
+                                  id: "",
+                                  participant1ID: widget.user.id,
+                                  participant1MobileNumber:
+                                      widget.user.mobileNumber,
+                                  participant2ID:
+                                      _receiverUserIDController.text,
+                                  participant2MobileNumber: "",
+                                  lastMessageTime: "",
+                                ),
+                                isNewChat: true,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 20),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_receiverUserIDController.text.isEmpty) {
-                              context.showErrorBar(
-                                content: const Text(
-                                  "The Receiver ID field is required.",
-                                ),
-                              );
-                            } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChatPage(
-                                    token: widget.user.token,
-                                    chatID: '',
-                                    hostPublicID: widget.user.id,
-                                    guestPublicID:
+                      TextButton(
+                        onPressed: () {
+                          if (_receiverUserIDController.text.isEmpty) {
+                            context.showErrorBar(
+                              content: const Text(
+                                "The Receiver ID field is required.",
+                              ),
+                            );
+                          } else {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatPage(
+                                  token: widget.user.token,
+                                  chatID: '',
+                                  hostPublicID: widget.user.id,
+                                  guestPublicID: _receiverUserIDController.text,
+                                  name: '',
+                                  isGuest: true,
+                                  myID: widget.user.id,
+                                  userChatItemDTO: UserChatItemDTO(
+                                    id: "",
+                                    participant1ID: widget.user.id,
+                                    participant1MobileNumber:
+                                        widget.user.mobileNumber,
+                                    participant2ID:
                                         _receiverUserIDController.text,
-                                    name: '',
-                                    isGuest: true,
-                                    myID: widget.user.id,
-                                    userChatItemDTO: UserChatItemDTO(
-                                      id: "",
-                                      participant1ID: widget.user.id,
-                                      participant1MobileNumber:
-                                          widget.user.mobileNumber,
-                                      participant2ID:
-                                          _receiverUserIDController.text,
-                                      participant2MobileNumber: "N",
-                                      lastMessageTime: "",
-                                    ),
-                                    isNewChat: true,
+                                    participant2MobileNumber: "",
+                                    lastMessageTime: "",
                                   ),
+                                  isNewChat: true,
                                 ),
-                              );
-                            }
-                          },
-                          child: const Text('Submit'),
+                              ),
+                            );
+
+                            // _receiverUserIDController.clear();
+                          }
+                        },
+                        child: Center(
+                          child: Text(
+                            'Submit',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
                         ),
                       ),
                     ],

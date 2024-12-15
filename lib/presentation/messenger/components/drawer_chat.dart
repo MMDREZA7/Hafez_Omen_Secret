@@ -2,6 +2,7 @@ import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bl
 import 'package:faleh_hafez/application/theme_changer/theme_changer_bloc.dart';
 import 'package:faleh_hafez/domain/user.dart';
 import 'package:faleh_hafez/presentation/home/home_page.dart';
+import 'package:faleh_hafez/presentation/home/profile/profile_page.dart';
 import 'package:faleh_hafez/presentation/messenger/components/drawer_chat_item.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/login%20&%20register/login_page_chat.dart';
 import 'package:flash/flash_helper.dart';
@@ -58,7 +59,7 @@ class _DrawerHomeChatState extends State<DrawerHomeChat> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: ListTile(
-                leading: IconButton(
+                trailing: IconButton(
                   onPressed: () {
                     Clipboard.setData(
                       ClipboardData(
@@ -76,7 +77,7 @@ class _DrawerHomeChatState extends State<DrawerHomeChat> {
                   icon: Icon(
                     Icons.copy,
                     size: 20,
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
                 // Icon(
@@ -94,12 +95,19 @@ class _DrawerHomeChatState extends State<DrawerHomeChat> {
               ),
             ),
             const SizedBox(height: 100),
-            DrawerItemChat(
-              boxColor: Colors.blue,
-              text: 'Profile',
-              onTap: () {},
-              icon: Icons.person,
-            ),
+            // DrawerItemChat(
+            //   boxColor: Colors.blue,
+            //   text: 'Profile',
+            //   onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => const ProfilePage(),
+            //       ),
+            //     );
+            //   },
+            //   icon: Icons.person,
+            // ),
             const SizedBox(height: 25),
             DrawerItemChat(
               boxColor: Colors.grey,

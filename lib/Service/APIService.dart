@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:faleh_hafez/domain/massage_dto.dart';
 import 'package:faleh_hafez/domain/user.dart';
 import 'package:faleh_hafez/domain/user_chat_dto.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class APIService {
@@ -10,6 +11,8 @@ class APIService {
 
   // Example for GET request
   Future<String> registerUser(String mobileNumber, String password) async {
+    final box = Hive.box('mybox');
+
     final url = Uri.parse('$baseUrl/api/Authentication/Register');
 
     try {
@@ -23,7 +26,6 @@ class APIService {
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         // localStorage colling && save user details
-        // final box = Hive.box('mybox');
 
         return response.body;
       } else {
@@ -35,6 +37,8 @@ class APIService {
   }
 
   Future<User> loginUser(String mobileNumber, String password) async {
+    final box = Hive.box('mybox');
+
     final url = Uri.parse('$baseUrl/api/Authentication/Login');
     try {
       var bodyRequest = {"mobileNumber": mobileNumber, "password": password};
@@ -52,7 +56,13 @@ class APIService {
           mobileNumber: bodyContent["mobileNumber"],
           token: bodyContent["token"],
           type: userTypeConvertToEnum[bodyContent["type"]]!,
+          // type: bodyContent["type"],
         );
+
+        box.put('userID', user.id);
+        box.put('userMobile', user.mobileNumber);
+        box.put('userToken', user.token);
+        box.put('userType', bodyContent['type'].toString());
 
         return user;
       } else {

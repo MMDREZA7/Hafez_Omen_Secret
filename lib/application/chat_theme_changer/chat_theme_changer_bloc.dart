@@ -16,7 +16,7 @@ class ChatThemeChangerBloc
   ChatThemeChangerBloc()
       : super(ChatThemeChangerInitial(theme: darkChatTheme)) {
     on<ChangeChatPageTheme>((event, emit) async {
-      emit(ChatThemeChangerLoading(theme: darkChatTheme));
+      // emit(ChatThemeChangerLoading(theme: darkChatTheme));
 
       var val = _myBox.get('chatTheme');
 
@@ -36,7 +36,7 @@ class ChatThemeChangerBloc
     // -----
 
     on<FirstTimeOpenChat>((event, emit) async {
-      emit(ChatThemeChangerLoading(theme: lightChatTheme));
+      // emit(ChatThemeChangerLoading(theme: lightChatTheme));
 
       mainTheme = darkChatTheme;
       _myBox.put('chatTheme', 'darkChatTheme');

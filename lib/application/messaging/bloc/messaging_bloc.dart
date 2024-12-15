@@ -52,7 +52,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
           .then(
             (value) => add(
               MessagingGetMessages(
-                chatID: event.chatID,
+                chatID: value["chatID"],
                 token: event.token,
               ),
             ),

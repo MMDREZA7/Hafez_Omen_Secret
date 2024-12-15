@@ -127,6 +127,36 @@ class _LoginPageMessengerState extends State<LoginPageMessenger> {
                                 fontSize: 22,
                               ),
                             ),
+                            onEditingComplete: () {
+                              if (_mobileNumberController.text.length != 11) {
+                                context.showErrorBar(
+                                  content:
+                                      const Text("شماره باید 11 رقم باشد."),
+                                );
+
+                                return;
+                              }
+
+                              if (_mobileNumberController.text == "" ||
+                                  _passwordController.text == "") {
+                                context.showErrorBar(
+                                  content: const Text(
+                                      "فیلدهای موبایل و پسورد الزامی هستند."),
+                                );
+
+                                return;
+                              }
+
+                              context.read<AuthenticationBloc>().add(
+                                    LoginUser(
+                                      user: UserRegisterLoginDTO(
+                                        password: _passwordController.text,
+                                        mobileNumber:
+                                            _mobileNumberController.text,
+                                      ),
+                                    ),
+                                  );
+                            },
                           ),
                         ),
                       ),

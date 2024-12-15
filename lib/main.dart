@@ -4,6 +4,7 @@ import 'package:faleh_hafez/application/omen_list/omen_list_bloc.dart';
 import 'package:faleh_hafez/application/theme_changer/theme_changer_bloc.dart';
 import 'package:faleh_hafez/presentation/home/home_page.dart';
 import 'package:faleh_hafez/presentation/home/components/splash_page.dart';
+import 'package:faleh_hafez/presentation/home/profile/profile_page.dart';
 import 'package:faleh_hafez/presentation/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,15 +76,6 @@ class MyApp extends StatelessWidget {
                       create: (context) =>
                           ChatThemeChangerBloc()..add(FirstTimeOpenChat()),
                       child: const HomePage(),
-                      // HomePageChats(
-                      //   user: User(
-                      //     id: "0c2c6453-98a2-4360-d591-08dd11e3d775",
-                      //     mobileNumber: "09000000000",
-                      //     token:
-                      //         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwYzJjNjQ1My05OGEyLTQzNjAtZDU5MS0wOGRkMTFlM2Q3NzUiLCJ1bmlxdWVfbmFtZSI6IjA5MTAwNTU2MDkyIiwibmJmIjoxNzMzMTQ5OTg2LCJleHAiOjE3MzMxNTc3ODYsImlhdCI6MTczMzE0OTk4NiwiaXNzIjoiWW91ckFQSSIsImF1ZCI6IllvdXJBUElVc2VycyJ9.SyrH7LeOO2tFxJmRdJJur27oG2OXPR5Dq3wxn9ESkWY",
-                      //     type: 1,
-                      //   ),
-                      // ),
                     ),
                   );
                 } else {
