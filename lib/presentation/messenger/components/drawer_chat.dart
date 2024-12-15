@@ -1,6 +1,6 @@
 import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
 import 'package:faleh_hafez/application/theme_changer/theme_changer_bloc.dart';
-import 'package:faleh_hafez/domain/user.dart';
+import 'package:faleh_hafez/domain/models/user.dart';
 import 'package:faleh_hafez/presentation/home/home_page.dart';
 import 'package:faleh_hafez/presentation/home/profile/profile_page.dart';
 import 'package:faleh_hafez/presentation/messenger/components/drawer_chat_item.dart';

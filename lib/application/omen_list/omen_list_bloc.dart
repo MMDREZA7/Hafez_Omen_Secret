@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:bloc/bloc.dart';
-import 'package:faleh_hafez/domain/omen_model.dart';
+import 'package:faleh_hafez/domain/models/omen_model.dart';
 import 'package:flutter/material.dart';
 
 part 'omen_list_event.dart';

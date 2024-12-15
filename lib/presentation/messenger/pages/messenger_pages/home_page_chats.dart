@@ -1,7 +1,7 @@
 import 'package:faleh_hafez/application/chat_items/chat_items_bloc.dart';
 import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
-import 'package:faleh_hafez/domain/user.dart';
-import 'package:faleh_hafez/domain/user_chat_dto.dart';
+import 'package:faleh_hafez/domain/models/user.dart';
+import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
 import 'package:faleh_hafez/presentation/messenger/components/drawer_chat.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/chat_page.dart';
 import 'package:flash/flash_helper.dart';

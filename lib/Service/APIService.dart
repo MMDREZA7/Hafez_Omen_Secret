@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:faleh_hafez/domain/massage_dto.dart';
-import 'package:faleh_hafez/domain/user.dart';
-import 'package:faleh_hafez/domain/user_chat_dto.dart';
+import 'package:faleh_hafez/domain/models/massage_dto.dart';
+import 'package:faleh_hafez/domain/models/user.dart';
+import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
@@ -179,9 +179,6 @@ class APIService {
       if (response.statusCode == 201 || response.statusCode == 200) {
         var message = json.decode(response.body);
 
-        print(
-            "messageeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee: ${message}");
-
         return message;
       } else {
         throw Exception(response.reasonPhrase);
@@ -190,4 +187,6 @@ class APIService {
       rethrow;
     }
   }
+
+  // TODO: Add Post.API (GetUserID)
 }
