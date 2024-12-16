@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 class APIService {
   final String baseUrl = "http://130.185.76.18:3030";
 
-  // Example for GET request
+  //* Authentication
   Future<String> registerUser(String mobileNumber, String password) async {
     final box = Hive.box('mybox');
 
@@ -73,6 +73,7 @@ class APIService {
     }
   }
 
+  //* Chat
   Future<List<UserChatItemDTO>> getUserChats({required String token}) async {
     final url = Uri.parse('$baseUrl/api/Chat/GetUserChats');
 
@@ -112,13 +113,16 @@ class APIService {
     }
   }
 
+  //* Message
   Future<List<MessageDTO>> getChatMessages({
     required String chatID,
     required String token,
   }) async {
-    final url = Uri.parse('$baseUrl/api/Message/GetChatMessages');
+    final url = Uri.parse('$baseUrl/api/Message/GetMessages');
 
-    var bodyRequest = {"chatID": chatID};
+    var bodyRequest = {
+      "id": chatID,
+    };
 
     List<MessageDTO> messagesList = [];
 
@@ -141,6 +145,13 @@ class APIService {
               reciverID: message["receiverID"],
               senderID: message["senderID"],
               text: message["text"],
+              chatID: message["chatID"],
+              groupID: message["groupID"],
+              senderMobileNumber: message["senderMobileNumber"],
+              receiverID: message["receiverID"],
+              receiverMobileNumber: message["receiverMobileNumber"],
+              sentDateTime: message["sentDateTime"],
+              isRead: message["isRead"],
             ),
           );
         }
@@ -188,5 +199,35 @@ class APIService {
     }
   }
 
-  // TODO: Add Post.API (GetUserID)
+  //* User
+  Future<String> getUserID({
+    required String token,
+    required String mobileNumber,
+  }) async {
+    final url = Uri.parse('$baseUrl/api/User/GetUserID');
+
+    var bodyRequest = {
+      "mobileNumber": mobileNumber,
+    };
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: json.encode(bodyRequest),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        var id = json.decode(response.body);
+        return id;
+      } else {
+        throw Exception(response.reasonPhrase);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

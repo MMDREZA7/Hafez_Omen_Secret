@@ -1,6 +1,6 @@
 import 'package:faleh_hafez/application/authentiction/authentication_bloc.dart';
 import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
-import 'package:faleh_hafez/application/omen_list/omen_list_bloc.dart';
+import 'package:faleh_hafez/application/omen_list/omen_bloc.dart';
 import 'package:faleh_hafez/application/theme_changer/theme_changer_bloc.dart';
 import 'package:faleh_hafez/presentation/home/home_page.dart';
 import 'package:faleh_hafez/presentation/home/components/splash_page.dart';
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
                     ThemeChangerBloc()..add(FirstTimeToOpenApp()),
               ),
               BlocProvider(
-                create: (context) => OmenListBloc(),
+                create: (context) => OmenBloc(),
               ),
               BlocProvider(
                 create: (context) => AuthenticationBloc(),

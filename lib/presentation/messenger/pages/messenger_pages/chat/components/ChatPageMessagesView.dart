@@ -1,3 +1,4 @@
+import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
 
@@ -19,7 +20,7 @@ class ChatPageMessagesListView extends StatelessWidget {
   final String? image;
   final String token;
   final UserChatItemDTO userChatItemDTO;
-
+  final MessageDTO message;
   final ScrollController scrollController = ScrollController();
 
   ChatPageMessagesListView({
@@ -31,94 +32,132 @@ class ChatPageMessagesListView extends StatelessWidget {
     required this.myID,
     required this.userChatItemDTO,
     required this.token,
+    required this.message,
     this.image,
   });
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MessagingBloc, MessagingState>(
+    return BlocBuilder<ChatThemeChangerBloc, ChatThemeChangerState>(
       builder: (context, state) {
-        if (state is MessagingInitial) {
-          return Column(
-            children: [
-              const Expanded(
-                child: EmptyView(message: 'No Messages Yet'),
-              ),
-              ChatInputField(
-                guestPublicID: guestPublicID,
-                hostPublicID: hostPublicID,
-                isGuest: isGuest,
-                isNewChat: isNewChat,
-                userChatItemDTO: userChatItemDTO,
-                token: token,
-                receiverID: myID == userChatItemDTO.participant1ID
-                    ? userChatItemDTO.participant2ID
-                    : userChatItemDTO.participant1ID,
-                // scrollControllerForMessagesList: scrollController,
-              ),
-            ],
+        if (state is ChatThemeChangerLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         }
-        if (state is MessagingError) {
-          return FailureView(
-            message: state.errorMessage.contains("Bad Request")
-                ? "درخواست شما قابل اجرا نمی باشد"
-                : state.errorMessage,
-            onTapTryAgain: () => context.read<MessagingBloc>()
-              ..add(
-                MessagingGetMessages(
-                  chatID: userChatItemDTO.id,
-                  token: token,
-                ),
+        if (state is ChatThemeChangerLoaded) {
+          return MaterialApp(
+            theme: state.theme,
+            home: Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.background,
+              body: BlocBuilder<MessagingBloc, MessagingState>(
+                builder: (context, state) {
+                  if (state is MessagingInitial) {
+                    return Column(
+                      children: [
+                        const Expanded(
+                          child: EmptyView(message: 'No Messages Yet'),
+                        ),
+                        ChatInputField(
+                          message: message,
+                          guestPublicID: guestPublicID,
+                          hostPublicID: hostPublicID,
+                          isGuest: isGuest,
+                          isNewChat: isNewChat,
+                          userChatItemDTO: userChatItemDTO,
+                          token: token,
+                          receiverID: myID == userChatItemDTO.participant1ID
+                              ? userChatItemDTO.participant2ID
+                              : userChatItemDTO.participant1ID,
+                          // scrollControllerForMessagesList: scrollController,
+                        ),
+                      ],
+                    );
+                  }
+                  if (state is MessagingError) {
+                    return BlocProvider(
+                      create: (context) =>
+                          ChatThemeChangerBloc()..add(FirstTimeOpenChat()),
+                      child: FailureView(
+                        message: state.errorMessage.contains("Bad Request")
+                            ? "درخواست شما قابل اجرا نمی باشد"
+                            : state.errorMessage,
+                        onTapTryAgain: () => context.read<MessagingBloc>()
+                          ..add(
+                            MessagingGetMessages(
+                              chatID: userChatItemDTO.id,
+                              token: token,
+                            ),
+                          ),
+                      ),
+                    );
+                  }
+                  if (state is MessagingLoadEmpty) {
+                    return Column(
+                      children: [
+                        const Expanded(
+                          child: EmptyView(message: 'No Messages Yet'),
+                        ),
+                        ChatInputField(
+                          message: message,
+                          guestPublicID: guestPublicID,
+                          hostPublicID: hostPublicID,
+                          isGuest: isGuest,
+                          isNewChat: isNewChat,
+                          userChatItemDTO: UserChatItemDTO.empty(),
+                          token: token,
+                          receiverID: myID == userChatItemDTO.participant1ID
+                              ? userChatItemDTO.participant2ID
+                              : userChatItemDTO.participant1ID,
+                          // scrollControllerForMessagesList: scrollController,
+                        ),
+                      ],
+                    );
+                  }
+                  if (state is MessagingLoading) {
+                    return const ChatsPageShimmerLoading();
+                  }
+                  if (state is MessagingLoaded) {
+                    return _loadSuccessView(
+                      messages: state.messages,
+                      message: message,
+                      isGuest: isGuest,
+                      hostPublicID: hostPublicID,
+                      guestPublicID: guestPublicID,
+                      image: image,
+                      myID: myID,
+                      isNewChat: isNewChat,
+                      userChatItemDTO: userChatItemDTO,
+                      token: token,
+                    );
+                  }
+                  return const Center(
+                    child: Text('Some error happened.'),
+                  );
+                },
               ),
+            ),
           );
         }
-        if (state is MessagingLoadEmpty) {
-          return Column(
-            children: [
-              const Expanded(
-                child: EmptyView(message: 'No Messages Yet'),
-              ),
-              ChatInputField(
-                guestPublicID: guestPublicID,
-                hostPublicID: hostPublicID,
-                isGuest: isGuest,
-                isNewChat: isNewChat,
-                userChatItemDTO: UserChatItemDTO.empty(),
-                token: token,
-                receiverID: myID == userChatItemDTO.participant1ID
-                    ? userChatItemDTO.participant2ID
-                    : userChatItemDTO.participant1ID,
-                // scrollControllerForMessagesList: scrollController,
-              ),
-            ],
-          );
-        }
-        if (state is MessagingLoading) {
-          return const ChatsPageShimmerLoading();
-        }
-        if (state is MessagingLoaded) {
-          return _loadSuccessView(
-            messages: state.messages,
-            isGuest: isGuest,
-            hostPublicID: hostPublicID,
-            guestPublicID: guestPublicID,
-            image: image,
-            myID: myID,
-            isNewChat: isNewChat,
-            userChatItemDTO: userChatItemDTO,
-            token: token,
-          );
-        }
-        return const Center(
-          child: Text('Some error happened.'),
-        );
+        return const Text("Erroring");
       },
     );
   }
 }
 
 class _loadSuccessView extends StatelessWidget {
+  final List<MessageDTO?> messages;
+  final bool isGuest;
+  final bool isNewChat;
+  final String hostPublicID;
+  final String guestPublicID;
+  // final ScrollController scrollController;
+  final String? image;
+  final String myID;
+  final String token;
+  final UserChatItemDTO userChatItemDTO;
+  final MessageDTO message;
+
   _loadSuccessView({
     Key? key,
     required this.messages,
@@ -130,57 +169,51 @@ class _loadSuccessView extends StatelessWidget {
     required this.myID,
     required this.token,
     required this.userChatItemDTO,
+    required this.message,
     this.image,
   }) : super(key: key);
 
-  final List<MessageDTO?> messages;
-  final bool isGuest;
-  final bool isNewChat;
-  final String hostPublicID;
-  final String guestPublicID;
-  // final ScrollController scrollController;
-  final String? image;
-  final String myID;
-  final String token;
-  final UserChatItemDTO userChatItemDTO;
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: ListView.builder(
-              // controller: scrollController,
-              itemCount: messages.length,
-              itemBuilder: (context, index) => Message(
-                isGuest: messages[index]!.reciverID == myID,
-                image: image,
-                message: ChatMessageForShow(
-                  id: 0,
-                  // messages[index]!.id,
-                  messageStatus: MessageStatus.viewed,
-                  isSender: messages[index]!.senderID == myID,
-                  text: messages[index]!.text,
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: ListView.builder(
+                // controller: scrollController,
+                itemCount: messages.length,
+                itemBuilder: (context, index) => Message(
+                  isGuest: messages[index]!.reciverID == myID,
+                  image: image,
+                  message: ChatMessageForShow(
+                    id: 0,
+                    // messages[index]!.id,
+                    messageStatus: MessageStatus.viewed,
+                    isSender: messages[index]!.senderID == myID,
+                    text: messages[index]!.text!,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        ChatInputField(
-          guestPublicID: guestPublicID,
-          hostPublicID: hostPublicID,
-          isGuest: isGuest,
-          isNewChat: isNewChat,
-          userChatItemDTO: userChatItemDTO,
-          token: token,
-          receiverID: myID == userChatItemDTO.participant1ID
-              ? userChatItemDTO.participant2ID
-              : userChatItemDTO.participant1ID,
-          // scrollControllerForMessagesList: scrollController,
-        ),
-      ],
+          ChatInputField(
+            message: message,
+            guestPublicID: guestPublicID,
+            hostPublicID: hostPublicID,
+            isGuest: isGuest,
+            isNewChat: isNewChat,
+            userChatItemDTO: userChatItemDTO,
+            token: token,
+            receiverID: myID == userChatItemDTO.participant1ID
+                ? userChatItemDTO.participant2ID
+                : userChatItemDTO.participant1ID,
+            // scrollControllerForMessagesList: scrollController,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -22,12 +22,14 @@ class MessagingSendMessage extends MessagingEvent {
   final String chatID;
   final bool isNewChat;
   final String token;
+  final String mobileNumber;
 
   const MessagingSendMessage({
     required this.message,
     required this.chatID,
     required this.isNewChat,
     required this.token,
+    required this.mobileNumber,
   });
 
   @override

@@ -43,11 +43,24 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     emit(MessagingLoading());
 
     try {
+      var otherID = null;
+
+      if (event.isNewChat) {
+        var convertedID = await APIService().getUserID(
+          token: event.token,
+          mobileNumber: event.mobileNumber,
+        );
+
+        otherID = convertedID;
+      } else {
+        otherID = event.message.reciverID;
+      }
+
       await APIService()
           .sendMessage(
             token: event.token,
-            receiverID: event.message.reciverID,
-            text: event.message.text,
+            receiverID: otherID,
+            text: event.message.text!,
           )
           .then(
             (value) => add(

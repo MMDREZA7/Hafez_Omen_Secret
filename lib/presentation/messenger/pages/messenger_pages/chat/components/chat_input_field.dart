@@ -1,3 +1,4 @@
+import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
 import 'package:faleh_hafez/constants.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
@@ -13,6 +14,7 @@ class ChatInputField extends StatefulWidget {
   final UserChatItemDTO userChatItemDTO;
   final String receiverID;
   final String token;
+  final MessageDTO message;
   // final ScrollController scrollControllerForMessagesList;
 
   const ChatInputField({
@@ -24,6 +26,7 @@ class ChatInputField extends StatefulWidget {
     required this.userChatItemDTO,
     required this.receiverID,
     required this.token,
+    required this.message,
     // required this.scrollControllerForMessagesList,
   }) : super(key: key);
 
@@ -167,12 +170,24 @@ class _ChatInputFieldState extends State<ChatInputField> {
                                 // );
                                 context.read<MessagingBloc>().add(
                                       MessagingSendMessage(
+                                        mobileNumber: widget.userChatItemDTO
+                                            .participant2MobileNumber,
                                         isNewChat: widget.isNewChat,
                                         chatID: widget.userChatItemDTO.id,
                                         message: MessageDTO(
-                                          reciverID: widget.receiverID,
-                                          senderID: "",
+                                          reciverID: widget.message.reciverID,
+                                          senderID: widget.message.senderID,
                                           text: _messageController.text,
+                                          chatID: widget.message.chatID,
+                                          groupID: widget.message.groupID,
+                                          senderMobileNumber:
+                                              widget.message.senderMobileNumber,
+                                          receiverID: widget.message.receiverID,
+                                          receiverMobileNumber: widget
+                                              .message.receiverMobileNumber,
+                                          sentDateTime:
+                                              widget.message.sentDateTime,
+                                          isRead: widget.message.isRead,
                                         ),
                                         token: widget.token,
                                       ),

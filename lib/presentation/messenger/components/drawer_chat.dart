@@ -27,49 +27,43 @@ class _DrawerHomeChatState extends State<DrawerHomeChat> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(10),
         child: ListView(
           children: [
+            const SizedBox(
+              height: 5,
+            ),
             Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: ListTile(
-                leading: Icon(
-                  Icons.person,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
                 title: Text(
                   widget.user.mobileNumber,
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ListTile(
+                leading: Icon(
+                  Icons.person,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
                 trailing: IconButton(
                   onPressed: () {
                     Clipboard.setData(
                       ClipboardData(
-                        text: widget.user.id,
+                        text: widget.user.mobileNumber,
                       ),
                     ).then(
                       (_) {
                         // ignore: use_build_context_synchronously
                         context.showInfoBar(
-                          content: const Text('Your ID copied to clipboard ;)'),
+                          content: Text(
+                            "Your Number copied to clipboard ;) \n ${widget.user.mobileNumber}",
+                          ),
                         );
                       },
                     );
@@ -84,14 +78,6 @@ class _DrawerHomeChatState extends State<DrawerHomeChat> {
                 //   Icons.person,
                 //   color: Theme.of(context).colorScheme.onPrimary,
                 // ),
-                title: Text(
-                  widget.user.id,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
               ),
             ),
             const SizedBox(height: 100),

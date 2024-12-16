@@ -6,5 +6,7 @@ class ChatItemsEvent {}
 class ChatItemsGetItemsEvent extends ChatItemsEvent {
   final String token;
 
-  ChatItemsGetItemsEvent({required this.token});
+  ChatItemsGetItemsEvent({
+    required this.token,
+  });
 }

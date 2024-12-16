@@ -1,5 +1,5 @@
 import 'package:faleh_hafez/application/chat_items/chat_items_bloc.dart';
-import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
+import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
 import 'package:faleh_hafez/presentation/messenger/components/drawer_chat.dart';
@@ -19,7 +19,7 @@ class HomePageChats extends StatefulWidget {
 }
 
 class _HomePageChatsState extends State<HomePageChats> {
-  final TextEditingController _receiverUserIDController =
+  final TextEditingController _receiverMobileNumberController =
       TextEditingController();
   final box = Hive.box('mybox');
   var userProfile = User(
@@ -50,6 +50,8 @@ class _HomePageChatsState extends State<HomePageChats> {
       // type: typeInt[userTypeConvertToEnum],
       // type: typeInt[userTypeConvertToEnum],
     );
+
+    setState(() {});
   }
 
   // @override
@@ -62,7 +64,11 @@ class _HomePageChatsState extends State<HomePageChats> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ChatItemsBloc()
-        ..add(ChatItemsGetItemsEvent(token: widget.user.token)),
+        ..add(
+          ChatItemsGetItemsEvent(
+            token: userProfile.token,
+          ),
+        ),
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -77,9 +83,11 @@ class _HomePageChatsState extends State<HomePageChats> {
           actions: [
             Builder(builder: (context) {
               return IconButton(
-                onPressed: () => context
-                    .read<ChatItemsBloc>()
-                    .add(ChatItemsGetItemsEvent(token: widget.user.token)),
+                onPressed: () => context.read<ChatItemsBloc>().add(
+                      ChatItemsGetItemsEvent(
+                        token: userProfile.token,
+                      ),
+                    ),
                 icon: Icon(
                   Icons.refresh,
                   color: Theme.of(context).primaryColor,
@@ -102,7 +110,10 @@ class _HomePageChatsState extends State<HomePageChats> {
                     Text(state.errorMessage),
                     ElevatedButton(
                       onPressed: () => context.read<ChatItemsBloc>().add(
-                          ChatItemsGetItemsEvent(token: widget.user.token)),
+                            ChatItemsGetItemsEvent(
+                              token: userProfile.token,
+                            ),
+                          ),
                       child: const Text("Try Again"),
                     ),
                   ],
@@ -128,8 +139,22 @@ class _HomePageChatsState extends State<HomePageChats> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ChatPage(
+                            message: MessageDTO(
+                              reciverID: guestID,
+                              senderID: hostID,
+                              text: '',
+                              chatID: chatItem.id,
+                              groupID: '',
+                              senderMobileNumber:
+                                  chatItem.participant2MobileNumber,
+                              receiverID: chatItem.participant2ID,
+                              receiverMobileNumber:
+                                  chatItem.participant1MobileNumber,
+                              sentDateTime: '',
+                              isRead: true,
+                            ),
                             chatID: chatItem.id,
-                            token: widget.user.token,
+                            token: userProfile.token,
                             hostPublicID: hostID,
                             guestPublicID: guestID,
                             isGuest: true,
@@ -184,7 +209,7 @@ class _HomePageChatsState extends State<HomePageChats> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            _receiverUserIDController.clear();
+            _receiverMobileNumberController.clear();
 
             showDialog(
               context: context,
@@ -201,55 +226,113 @@ class _HomePageChatsState extends State<HomePageChats> {
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
-                        decoration:
-                            const InputDecoration(labelText: 'Receiver ID'),
-                        controller: _receiverUserIDController,
+                        decoration: const InputDecoration(
+                          labelText: 'Reciver Phone Number',
+                        ),
+                        keyboardType: TextInputType.number,
+                        controller: _receiverMobileNumberController,
                         onEditingComplete: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChatPage(
-                                token: widget.user.token,
-                                chatID: '',
-                                hostPublicID: widget.user.id,
-                                guestPublicID: _receiverUserIDController.text,
-                                name: '',
-                                isGuest: true,
-                                myID: widget.user.id,
-                                userChatItemDTO: UserChatItemDTO(
-                                  id: "",
-                                  participant1ID: widget.user.id,
-                                  participant1MobileNumber:
-                                      widget.user.mobileNumber,
-                                  participant2ID:
-                                      _receiverUserIDController.text,
-                                  participant2MobileNumber: "",
-                                  lastMessageTime: "",
-                                ),
-                                isNewChat: true,
+                          if (_receiverMobileNumberController.text == '') {
+                            context.showErrorBar(
+                              content: const Text(
+                                'فیلد شماره تماس الزامیست لطفا آن را پر کنید',
                               ),
-                            ),
-                          );
+                            );
+                            return;
+                          }
+                          if (_receiverMobileNumberController.text.length <
+                              11) {
+                            context.showErrorBar(
+                              content: const Text(
+                                'شماره موبایل باید 11 رقمی باشد و با 09 شروع شود',
+                              ),
+                            );
+                            return;
+                          } else {
+                            // TODO: Testing this section to check when go back on chat message
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatPage(
+                                  message: MessageDTO(
+                                    reciverID: '',
+                                    senderID: userProfile.id,
+                                    text: '',
+                                    chatID: '',
+                                    groupID: '',
+                                    senderMobileNumber:
+                                        userProfile.mobileNumber,
+                                    receiverID: '',
+                                    receiverMobileNumber: '',
+                                    sentDateTime: '',
+                                    isRead: true,
+                                  ),
+                                  token: userProfile.token,
+                                  chatID: '',
+                                  hostPublicID: widget.user.id,
+                                  guestPublicID: '',
+                                  name: '',
+                                  isGuest: true,
+                                  myID: widget.user.id,
+                                  userChatItemDTO: UserChatItemDTO(
+                                    id: '',
+                                    participant1ID: widget.user.id,
+                                    participant1MobileNumber:
+                                        widget.user.mobileNumber,
+                                    participant2ID: '',
+                                    participant2MobileNumber:
+                                        _receiverMobileNumberController.text,
+                                    lastMessageTime: "",
+                                  ),
+                                  isNewChat: true,
+                                ),
+                              ),
+                            );
+                          }
                         },
                       ),
                       const SizedBox(height: 20),
                       TextButton(
                         onPressed: () {
-                          if (_receiverUserIDController.text.isEmpty) {
+                          if (_receiverMobileNumberController.text == '') {
                             context.showErrorBar(
                               content: const Text(
-                                "The Receiver ID field is required.",
+                                'فیلد شماره تماس الزامیست لطفا آن را پر کنید',
                               ),
                             );
+                            return;
+                          }
+                          if (_receiverMobileNumberController.text.length <
+                              11) {
+                            context.showErrorBar(
+                              content: const Text(
+                                'شماره موبایل باید 11 رقمی باشد و با 09 شروع شود',
+                              ),
+                            );
+                            return;
                           } else {
+                            // TODO: Testing this section to check when go back on chat message
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChatPage(
-                                  token: widget.user.token,
+                                  message: MessageDTO(
+                                    reciverID: '',
+                                    senderID: userProfile.id,
+                                    text: '',
+                                    chatID: '',
+                                    groupID: '',
+                                    senderMobileNumber:
+                                        userProfile.mobileNumber,
+                                    receiverID: '',
+                                    receiverMobileNumber: '',
+                                    sentDateTime: '',
+                                    isRead: true,
+                                  ),
+                                  token: userProfile.token,
                                   chatID: '',
                                   hostPublicID: widget.user.id,
-                                  guestPublicID: _receiverUserIDController.text,
+                                  guestPublicID: '',
                                   name: '',
                                   isGuest: true,
                                   myID: widget.user.id,
@@ -258,19 +341,18 @@ class _HomePageChatsState extends State<HomePageChats> {
                                     participant1ID: widget.user.id,
                                     participant1MobileNumber:
                                         widget.user.mobileNumber,
-                                    participant2ID:
-                                        _receiverUserIDController.text,
-                                    participant2MobileNumber: "",
+                                    participant2ID: '',
+                                    participant2MobileNumber:
+                                        _receiverMobileNumberController.text,
                                     lastMessageTime: "",
                                   ),
                                   isNewChat: true,
                                 ),
                               ),
                             );
-
-                            // _receiverUserIDController.clear();
                           }
                         },
+                        // _receiverUserIDController.clear();
                         child: Center(
                           child: Text(
                             'Submit',

@@ -1,4 +1,4 @@
-import 'package:faleh_hafez/application/omen_list/omen_list_bloc.dart';
+import 'package:faleh_hafez/application/omen_list/omen_bloc.dart';
 import 'package:faleh_hafez/application/theme_changer/theme_changer_bloc.dart';
 import 'package:faleh_hafez/presentation/home/components/Quick_guide_dialog.dart';
 import 'package:faleh_hafez/presentation/home/components/button.dart';
@@ -86,14 +86,15 @@ class _HomePageState extends State<HomePage> {
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Center(
-            child: BlocBuilder<OmenListBloc, OmenListState>(
+            child: BlocBuilder<OmenBloc, OmenState>(
               builder: (context, state) {
-                if (state is OmenListLoading) {
+                if (state is OmenLoading) {
                   return CircularProgressIndicator(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Theme.of(context).colorScheme.primary,
+                    strokeWidth: 6,
                   );
                 }
-                if (state is OmenListLoaded) {
+                if (state is OmenLoaded) {
                   return Column(
                     children: [
                       Expanded(
@@ -182,9 +183,7 @@ class _HomePageState extends State<HomePage> {
                       // give user's omen button for second time
                       MyButton(
                         onTap: () {
-                          context
-                              .read<OmenListBloc>()
-                              .add(OmenListShowOmenEvent());
+                          context.read<OmenBloc>().add(OmenGetRandomEvent());
                         },
                         text: 'ابتدا نیت کنید و سپس کلیک کنید',
                         height: 80,
@@ -197,14 +196,24 @@ class _HomePageState extends State<HomePage> {
                     ],
                   );
                 }
+                if (state is OmenError) {
+                  return Center(
+                    child: Text(
+                      state.errorMessage,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                    ),
+                  );
+                }
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     // give user's omen button for first time
                     MyButton(
                       onTap: () {
-                        context.read<OmenListBloc>().add(
-                              OmenListShowOmenEvent(),
+                        context.read<OmenBloc>().add(
+                              OmenGetRandomEvent(),
                             );
                       },
                       text: 'ابتدا نیت کنید و سپس کلیک کنید',

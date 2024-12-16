@@ -1,4 +1,5 @@
 import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
+import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +15,7 @@ class ChatPage extends StatelessWidget {
   final String myID;
   final UserChatItemDTO userChatItemDTO;
   final bool isNewChat;
+  final MessageDTO message;
 
   const ChatPage({
     super.key,
@@ -25,6 +27,7 @@ class ChatPage extends StatelessWidget {
     required this.token,
     required this.myID,
     required this.userChatItemDTO,
+    required this.message,
     this.isNewChat = false,
   });
 
@@ -48,14 +51,19 @@ class ChatPage extends StatelessWidget {
         builder: (context) {
           return Scaffold(
             appBar: buildAppBar(context),
-            body: ChatPageMessagesListView(
-              hostPublicID: hostPublicID,
-              guestPublicID: guestPublicID,
-              isGuest: isGuest,
-              myID: myID,
-              isNewChat: isNewChat,
-              userChatItemDTO: userChatItemDTO,
-              token: token,
+            body: BlocProvider(
+              create: (context) =>
+                  ChatThemeChangerBloc()..add(FirstTimeOpenChat()),
+              child: ChatPageMessagesListView(
+                message: message,
+                hostPublicID: hostPublicID,
+                guestPublicID: guestPublicID,
+                isGuest: isGuest,
+                myID: myID,
+                isNewChat: isNewChat,
+                userChatItemDTO: userChatItemDTO,
+                token: token,
+              ),
             ),
           );
         },
