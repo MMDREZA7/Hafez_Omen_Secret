@@ -110,6 +110,40 @@ class _ChatInputFieldState extends State<ChatInputField> {
                       child: TextFormField(
                         focusNode: _messageFocusNode,
                         controller: _messageController,
+                        onEditingComplete: () {
+                          if (_messageController.text != '') {
+                            // widget.scrollControllerForMessagesList
+                            //     .animateTo(
+                            //   widget.scrollControllerForMessagesList
+                            //       .position.maxScrollExtent,
+                            //   duration: Duration(milliseconds: 300),
+                            //   curve: Curves.easeOut,
+                            // );
+                            context.read<MessagingBloc>().add(
+                                  MessagingSendMessage(
+                                    mobileNumber: widget.userChatItemDTO
+                                        .participant2MobileNumber,
+                                    isNewChat: widget.isNewChat,
+                                    chatID: widget.userChatItemDTO.id,
+                                    message: MessageDTO(
+                                      reciverID: widget.message.reciverID,
+                                      senderID: widget.message.senderID,
+                                      text: _messageController.text,
+                                      chatID: widget.message.chatID,
+                                      groupID: widget.message.groupID,
+                                      senderMobileNumber:
+                                          widget.message.senderMobileNumber,
+                                      receiverID: widget.message.receiverID,
+                                      receiverMobileNumber:
+                                          widget.message.receiverMobileNumber,
+                                      sentDateTime: widget.message.sentDateTime,
+                                      isRead: widget.message.isRead,
+                                    ),
+                                    token: widget.token,
+                                  ),
+                                );
+                          }
+                        },
                         decoration: const InputDecoration(
                           hintText: "Type message",
                           border: InputBorder.none,
