@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:faleh_hafez/domain/models/group.dart';
+import 'package:faleh_hafez/domain/models/group_chat_dto%20copy.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
@@ -16,7 +18,10 @@ class APIService {
     final url = Uri.parse('$baseUrl/api/Authentication/Register');
 
     try {
-      var bodyRequest = {"mobileNumber": mobileNumber, "password": password};
+      var bodyRequest = {
+        "mobileNumber": mobileNumber,
+        "password": password,
+      };
 
       final response = await http.post(
         url,
@@ -25,8 +30,6 @@ class APIService {
       );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        // localStorage colling && save user details
-
         return response.body;
       } else {
         throw Exception(response.body);
@@ -56,8 +59,12 @@ class APIService {
           mobileNumber: bodyContent["mobileNumber"],
           token: bodyContent["token"],
           type: userTypeConvertToEnum[bodyContent["type"]]!,
-          // type: bodyContent["type"],
         );
+
+        box.delete('userID');
+        box.delete('userMobile');
+        box.delete('userToken');
+        box.delete('userType');
 
         box.put('userID', user.id);
         box.put('userMobile', user.mobileNumber);
@@ -107,6 +114,83 @@ class APIService {
         return userChatItems;
       } else {
         throw Exception(response.reasonPhrase);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  //* Group
+  Future<List<groupChatItemDTO>> getGroupChats({required String token}) async {
+    final url = Uri.parse('$baseUrl/api/Group/GetUserGroups');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        var bodyContent = json.decode(response.body);
+
+        final List<groupChatItemDTO> userChatItems = [];
+
+        for (var item in bodyContent) {
+          userChatItems.add(
+            groupChatItemDTO(
+              id: item["id"],
+              groupName: item["groupName"],
+              lastMessageTime: item["lastMessageTime"],
+              createdByID: item["createdByID"],
+            ),
+          );
+        }
+
+        return userChatItems;
+      } else {
+        throw Exception(response.reasonPhrase);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Group> createGroup({
+    required String groupName,
+    required String token,
+  }) async {
+    final box = Hive.box('mybox');
+
+    final url = Uri.parse('$baseUrl/api/Group/CreateGroup');
+    try {
+      var bodyRequest = {"groupName": groupName};
+
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: json.encode(bodyRequest),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        var bodyContent = json.decode(response.body);
+        var group = Group(
+          id: bodyContent["id"],
+          groupName: bodyContent["groupName"],
+          lastMessageTime: bodyContent["lastMessageTime"],
+          createdByID: bodyContent["createdByID"],
+        );
+
+        print(group);
+
+        return group;
+      } else {
+        throw Exception(response.body);
       }
     } catch (e) {
       rethrow;
