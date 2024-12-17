@@ -175,16 +175,12 @@ class _LoginPageMessengerState extends State<LoginPageMessenger> {
                                   if (themeChanger is ChatThemeChangerLoaded) {
                                     return MaterialApp(
                                       theme: themeChanger.theme,
-                                      home: HomePageChats(
-                                        user: state.user,
-                                      ),
+                                      home: const HomePageChats(),
                                     );
                                   }
                                   return MaterialApp(
                                     theme: themeChanger.theme,
-                                    home: HomePageChats(
-                                      user: state.user,
-                                    ),
+                                    home: const HomePageChats(),
                                   );
                                 },
                               ),

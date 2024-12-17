@@ -163,6 +163,59 @@ class _RegisterPageMessengerState extends State<RegisterPageMessenger> {
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
+                            // ? on Editing compelete in confirm password
+                            onEditingComplete: () {
+                              if (_mobileNumberController.text.length != 11) {
+                                context.showErrorBar(
+                                  content: const Text(
+                                    'شماره موبایل باید 11 رقمی باشد',
+                                  ),
+                                );
+                                return;
+                              }
+                              if (_mobileNumberController.text == "") {
+                                context.showErrorBar(
+                                  content: const Text(
+                                    'فیلد موبایل الزامی است',
+                                  ),
+                                );
+                                return;
+                              }
+                              if (_passwordController.text == "") {
+                                context.showErrorBar(
+                                  content: const Text(
+                                    'فیلد پسورد الزامی است',
+                                  ),
+                                );
+                                return;
+                              }
+                              if (_confirmPasswordController.text == "") {
+                                context.showErrorBar(
+                                  content: const Text(
+                                    'فیلد تایید پسورد الزامی است',
+                                  ),
+                                );
+                                return;
+                              }
+                              if (_confirmPasswordController.text !=
+                                  _passwordController.text) {
+                                context.showErrorBar(
+                                  content: const Text(
+                                    'پسورد و تایید پسورد باید مساوی باشند',
+                                  ),
+                                );
+                                return;
+                              }
+                              context.read<AuthenticationBloc>().add(
+                                    RegisterUser(
+                                      user: UserRegisterLoginDTO(
+                                        password: _passwordController.text,
+                                        mobileNumber:
+                                            _mobileNumberController.text,
+                                      ),
+                                    ),
+                                  );
+                            },
                             decoration: InputDecoration(
                               errorText: errorText,
                               errorBorder: const OutlineInputBorder(
@@ -197,16 +250,12 @@ class _RegisterPageMessengerState extends State<RegisterPageMessenger> {
                                       is ChatThemeChangerLoaded) {
                                     return MaterialApp(
                                       theme: themeChangerState.theme,
-                                      home: HomePageChats(
-                                        user: state.user,
-                                      ),
+                                      home: const HomePageChats(),
                                     );
                                   }
                                   return MaterialApp(
                                     theme: themeChangerState.theme,
-                                    home: HomePageChats(
-                                      user: state.user,
-                                    ),
+                                    home: const HomePageChats(),
                                   );
                                 },
                               ),
@@ -215,14 +264,16 @@ class _RegisterPageMessengerState extends State<RegisterPageMessenger> {
 
                           context.showSuccessBar(
                             content: const Text(
-                                "با موفقیت ثبت نام شدید لطفا برای ورود اقدام کنید"),
+                              "با موفقیت ثبت نام شدید",
+                            ),
                           );
                         }
 
                         if (state is AuthenticationRegisterSuccess) {
                           context.showSuccessBar(
                             content: const Text(
-                                "با موفقیت ثبت نام شدید لطفا برای ورود اقدام کنید"),
+                              "با موفقیت ثبت نام شدید",
+                            ),
                           );
                         }
 
