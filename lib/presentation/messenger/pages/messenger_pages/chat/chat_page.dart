@@ -1,6 +1,8 @@
 import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
+import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/home_page_chats.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -73,6 +75,18 @@ class ChatPage extends StatelessWidget {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
+      leading: IconButton(
+        onPressed: () => Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePageChats(),
+          ),
+        ),
+        icon: Icon(
+          CupertinoIcons.back,
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
+      ),
       title: Row(
         children: [
           const CircleAvatar(
