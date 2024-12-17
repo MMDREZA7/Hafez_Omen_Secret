@@ -1,3 +1,4 @@
+import 'package:faleh_hafez/Service/APIService.dart';
 import 'package:faleh_hafez/application/chat_items/chat_items_bloc.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user.dart';
@@ -5,14 +6,15 @@ import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
 import 'package:faleh_hafez/presentation/messenger/components/drawer_chat.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/chat_page.dart';
 import 'package:flash/flash_helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HomePageChats extends StatefulWidget {
-  final User user;
-
-  const HomePageChats({Key? key, required this.user}) : super(key: key);
+  const HomePageChats({
+    super.key,
+  });
 
   @override
   _HomePageChatsState createState() => _HomePageChatsState();
@@ -82,16 +84,30 @@ class _HomePageChatsState extends State<HomePageChats> {
           ),
           actions: [
             Builder(builder: (context) {
-              return IconButton(
-                onPressed: () => context.read<ChatItemsBloc>().add(
-                      ChatItemsGetItemsEvent(
-                        token: userProfile.token,
-                      ),
+              return Row(
+                children: [
+                  IconButton(
+                    onPressed: () => context.read<ChatItemsBloc>().add(
+                          ChatItemsGetItemsEvent(
+                            token: userProfile.token,
+                          ),
+                        ),
+                    icon: Icon(
+                      Icons.refresh,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
-                icon: Icon(
-                  Icons.refresh,
-                  color: Theme.of(context).primaryColor,
-                ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      var response =
+                          APIService().getUserChats(token: userProfile.token);
+                      print("Groups: ${response}");
+                      print("User Token: ${userProfile.token}");
+                      print("User Mobile Number: ${userProfile.mobileNumber}");
+                    },
+                    icon: Icon(Icons.add),
+                  ),
+                ],
               );
             }),
           ],
@@ -125,7 +141,7 @@ class _HomePageChatsState extends State<HomePageChats> {
                 itemCount: state.userChatItems.length,
                 itemBuilder: (context, index) {
                   final chatItem = state.userChatItems[index];
-                  final isHost = widget.user.id == chatItem.participant1ID;
+                  final isHost = userProfile.id == chatItem.participant1ID;
                   final hostID = isHost
                       ? chatItem.participant1ID
                       : chatItem.participant2ID;
@@ -159,7 +175,7 @@ class _HomePageChatsState extends State<HomePageChats> {
                             guestPublicID: guestID,
                             isGuest: true,
                             name: '',
-                            myID: widget.user.id,
+                            myID: userProfile.id,
                             userChatItemDTO: chatItem,
                           ),
                         ),
@@ -250,7 +266,7 @@ class _HomePageChatsState extends State<HomePageChats> {
                             return;
                           } else {
                             // TODO: Testing this section to check when go back on chat message
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChatPage(
@@ -269,16 +285,16 @@ class _HomePageChatsState extends State<HomePageChats> {
                                   ),
                                   token: userProfile.token,
                                   chatID: '',
-                                  hostPublicID: widget.user.id,
+                                  hostPublicID: userProfile.id,
                                   guestPublicID: '',
                                   name: '',
                                   isGuest: true,
-                                  myID: widget.user.id,
+                                  myID: userProfile.id,
                                   userChatItemDTO: UserChatItemDTO(
                                     id: '',
-                                    participant1ID: widget.user.id,
+                                    participant1ID: userProfile.id,
                                     participant1MobileNumber:
-                                        widget.user.mobileNumber,
+                                        userProfile.mobileNumber,
                                     participant2ID: '',
                                     participant2MobileNumber:
                                         _receiverMobileNumberController.text,
@@ -312,7 +328,7 @@ class _HomePageChatsState extends State<HomePageChats> {
                             return;
                           } else {
                             // TODO: Testing this section to check when go back on chat message
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChatPage(
@@ -331,16 +347,16 @@ class _HomePageChatsState extends State<HomePageChats> {
                                   ),
                                   token: userProfile.token,
                                   chatID: '',
-                                  hostPublicID: widget.user.id,
+                                  hostPublicID: userProfile.id,
                                   guestPublicID: '',
                                   name: '',
                                   isGuest: true,
-                                  myID: widget.user.id,
+                                  myID: userProfile.id,
                                   userChatItemDTO: UserChatItemDTO(
                                     id: "",
-                                    participant1ID: widget.user.id,
+                                    participant1ID: userProfile.id,
                                     participant1MobileNumber:
-                                        widget.user.mobileNumber,
+                                        userProfile.mobileNumber,
                                     participant2ID: '',
                                     participant2MobileNumber:
                                         _receiverMobileNumberController.text,
