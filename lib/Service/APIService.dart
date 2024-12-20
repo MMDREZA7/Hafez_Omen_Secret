@@ -121,7 +121,7 @@ class APIService {
   }
 
   //* Group
-  Future<List<groupChatItemDTO>> getGroupChats({required String token}) async {
+  Future<List<GroupChatItemDTO>> getGroupsChat({required String token}) async {
     final url = Uri.parse('$baseUrl/api/Group/GetUserGroups');
 
     try {
@@ -136,17 +136,18 @@ class APIService {
       if (response.statusCode == 201 || response.statusCode == 200) {
         var bodyContent = json.decode(response.body);
 
-        final List<groupChatItemDTO> userChatItems = [];
+        final List<GroupChatItemDTO> userChatItems = [];
 
         for (var item in bodyContent) {
           userChatItems.add(
-            groupChatItemDTO(
+            GroupChatItemDTO(
               id: item["id"],
               groupName: item["groupName"],
               lastMessageTime: item["lastMessageTime"],
               createdByID: item["createdByID"],
             ),
           );
+          print("ITEM: ${item}");
         }
 
         return userChatItems;
@@ -226,7 +227,6 @@ class APIService {
         for (var message in messages) {
           messagesList.add(
             MessageDTO(
-              reciverID: message["receiverID"],
               senderID: message["senderID"],
               text: message["text"],
               chatID: message["chatID"],
@@ -273,6 +273,8 @@ class APIService {
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         var message = json.decode(response.body);
+
+        print("Message: ${message}");
 
         return message;
       } else {

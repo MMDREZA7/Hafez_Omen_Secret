@@ -1,10 +1,13 @@
 import 'package:faleh_hafez/Service/APIService.dart';
 import 'package:faleh_hafez/application/chat_items/chat_items_bloc.dart';
+import 'package:faleh_hafez/domain/models/group_chat_dto%20copy.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
+import 'package:faleh_hafez/presentation/messenger/components/bottom_navbar/bottom_navbar.dart';
 import 'package:faleh_hafez/presentation/messenger/components/drawer_chat.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/chat_page.dart';
+import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/public_chats_page.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +24,8 @@ class HomePageChats extends StatefulWidget {
 }
 
 class _HomePageChatsState extends State<HomePageChats> {
+  int currentIndexPage = 0;
+
   final TextEditingController _receiverMobileNumberController =
       TextEditingController();
   final box = Hive.box('mybox');
@@ -52,8 +57,6 @@ class _HomePageChatsState extends State<HomePageChats> {
       // type: typeInt[userTypeConvertToEnum],
       // type: typeInt[userTypeConvertToEnum],
     );
-
-    setState(() {});
   }
 
   // @override
@@ -67,7 +70,7 @@ class _HomePageChatsState extends State<HomePageChats> {
     return BlocProvider(
       create: (context) => ChatItemsBloc()
         ..add(
-          ChatItemsGetItemsEvent(
+          ChatItemsGetPrivateChatsEvent(
             token: userProfile.token,
           ),
         ),
@@ -84,30 +87,29 @@ class _HomePageChatsState extends State<HomePageChats> {
           ),
           actions: [
             Builder(builder: (context) {
-              return Row(
-                children: [
-                  IconButton(
-                    onPressed: () => context.read<ChatItemsBloc>().add(
-                          ChatItemsGetItemsEvent(
-                            token: userProfile.token,
-                          ),
-                        ),
-                    icon: Icon(
-                      Icons.refresh,
-                      color: Theme.of(context).colorScheme.onPrimary,
+              return IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PublicChatsPage(),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      var response =
-                          APIService().getUserChats(token: userProfile.token);
-                      print("Groups: ${response}");
-                      print("User Token: ${userProfile.token}");
-                      print("User Mobile Number: ${userProfile.mobileNumber}");
-                    },
-                    icon: Icon(Icons.add),
-                  ),
-                ],
+                  );
+                },
+                icon: Icon(Icons.add),
+              );
+            }),
+            Builder(builder: (context) {
+              return IconButton(
+                onPressed: () => context.read<ChatItemsBloc>().add(
+                      ChatItemsGetPrivateChatsEvent(
+                        token: userProfile.token,
+                      ),
+                    ),
+                icon: Icon(
+                  Icons.refresh,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
               );
             }),
           ],
@@ -126,7 +128,7 @@ class _HomePageChatsState extends State<HomePageChats> {
                     Text(state.errorMessage),
                     ElevatedButton(
                       onPressed: () => context.read<ChatItemsBloc>().add(
-                            ChatItemsGetItemsEvent(
+                            ChatItemsGetPrivateChatsEvent(
                               token: userProfile.token,
                             ),
                           ),
@@ -136,7 +138,7 @@ class _HomePageChatsState extends State<HomePageChats> {
                 ),
               );
             }
-            if (state is ChatItemsLoaded) {
+            if (state is ChatItemsPrivateChatsLoaded) {
               return ListView.builder(
                 itemCount: state.userChatItems.length,
                 itemBuilder: (context, index) {
@@ -155,8 +157,13 @@ class _HomePageChatsState extends State<HomePageChats> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ChatPage(
+                            groupChatItemDTO: GroupChatItemDTO(
+                              id: '',
+                              groupName: '',
+                              lastMessageTime: '',
+                              createdByID: '',
+                            ),
                             message: MessageDTO(
-                              reciverID: guestID,
                               senderID: hostID,
                               text: '',
                               chatID: chatItem.id,
@@ -270,8 +277,13 @@ class _HomePageChatsState extends State<HomePageChats> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChatPage(
+                                  groupChatItemDTO: GroupChatItemDTO(
+                                    id: '',
+                                    groupName: '',
+                                    lastMessageTime: '',
+                                    createdByID: '',
+                                  ),
                                   message: MessageDTO(
-                                    reciverID: '',
                                     senderID: userProfile.id,
                                     text: '',
                                     chatID: '',
@@ -332,8 +344,13 @@ class _HomePageChatsState extends State<HomePageChats> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChatPage(
+                                  groupChatItemDTO: GroupChatItemDTO(
+                                    id: '',
+                                    groupName: '',
+                                    lastMessageTime: '',
+                                    createdByID: '',
+                                  ),
                                   message: MessageDTO(
-                                    reciverID: '',
                                     senderID: userProfile.id,
                                     text: '',
                                     chatID: '',

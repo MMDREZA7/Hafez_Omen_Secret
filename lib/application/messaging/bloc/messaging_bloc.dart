@@ -53,7 +53,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
         otherID = convertedID;
       } else {
-        otherID = event.message.reciverID;
+        otherID = event.message.receiverID;
       }
 
       await APIService()
@@ -65,7 +65,9 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
           .then(
             (value) => add(
               MessagingGetMessages(
-                chatID: value["chatID"],
+                chatID: value["chatID"] ?? value["groupID"]
+                //  : value["chatID"]
+                ,
                 token: event.token,
               ),
             ),

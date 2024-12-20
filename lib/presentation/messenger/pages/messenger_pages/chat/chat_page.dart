@@ -1,4 +1,5 @@
 import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
+import 'package:faleh_hafez/domain/models/group_chat_dto%20copy.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/home_page_chats.dart';
@@ -16,6 +17,7 @@ class ChatPage extends StatelessWidget {
   final String token;
   final String myID;
   final UserChatItemDTO userChatItemDTO;
+  final GroupChatItemDTO groupChatItemDTO;
   final bool isNewChat;
   final MessageDTO message;
 
@@ -29,6 +31,7 @@ class ChatPage extends StatelessWidget {
     required this.token,
     required this.myID,
     required this.userChatItemDTO,
+    required this.groupChatItemDTO,
     required this.message,
     this.isNewChat = false,
   });
@@ -65,6 +68,7 @@ class ChatPage extends StatelessWidget {
                 isNewChat: isNewChat,
                 userChatItemDTO: userChatItemDTO,
                 token: token,
+                groupChatItemDTO: groupChatItemDTO,
               ),
             ),
           );

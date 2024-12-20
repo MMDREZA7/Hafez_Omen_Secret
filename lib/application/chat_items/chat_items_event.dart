@@ -3,10 +3,18 @@ part of 'chat_items_bloc.dart';
 @immutable
 class ChatItemsEvent {}
 
-class ChatItemsGetItemsEvent extends ChatItemsEvent {
+class ChatItemsGetPrivateChatsEvent extends ChatItemsEvent {
   final String token;
 
-  ChatItemsGetItemsEvent({
+  ChatItemsGetPrivateChatsEvent({
+    required this.token,
+  });
+}
+
+class ChatItemsGetPublicChatsEvent extends ChatItemsEvent {
+  final String token;
+
+  ChatItemsGetPublicChatsEvent({
     required this.token,
   });
 }

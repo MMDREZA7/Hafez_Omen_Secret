@@ -1,5 +1,4 @@
 class MessageDTO {
-  final String? reciverID;
   final String? senderID;
   final String? text;
   final String? chatID;
@@ -11,7 +10,6 @@ class MessageDTO {
   final bool? isRead;
 
   MessageDTO({
-    required this.reciverID,
     required this.senderID,
     required this.text,
     required this.chatID,

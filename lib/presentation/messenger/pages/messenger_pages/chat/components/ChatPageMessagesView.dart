@@ -1,4 +1,5 @@
 import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
+import 'package:faleh_hafez/domain/models/group_chat_dto%20copy.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
 
@@ -20,6 +21,7 @@ class ChatPageMessagesListView extends StatelessWidget {
   final String? image;
   final String token;
   final UserChatItemDTO userChatItemDTO;
+  final GroupChatItemDTO groupChatItemDTO;
   final MessageDTO message;
   final ScrollController scrollController = ScrollController();
 
@@ -31,6 +33,7 @@ class ChatPageMessagesListView extends StatelessWidget {
     required this.isNewChat,
     required this.myID,
     required this.userChatItemDTO,
+    required this.groupChatItemDTO,
     required this.token,
     required this.message,
     this.image,
@@ -65,6 +68,7 @@ class ChatPageMessagesListView extends StatelessWidget {
                           isGuest: isGuest,
                           isNewChat: isNewChat,
                           userChatItemDTO: userChatItemDTO,
+                          groupChatItemDTO: groupChatItemDTO,
                           token: token,
                           receiverID: myID == userChatItemDTO.participant1ID
                               ? userChatItemDTO.participant2ID
@@ -104,6 +108,7 @@ class ChatPageMessagesListView extends StatelessWidget {
                           hostPublicID: hostPublicID,
                           isGuest: isGuest,
                           isNewChat: isNewChat,
+                          groupChatItemDTO: GroupChatItemDTO.empty(),
                           userChatItemDTO: UserChatItemDTO.empty(),
                           token: token,
                           receiverID: myID == userChatItemDTO.participant1ID
@@ -128,6 +133,7 @@ class ChatPageMessagesListView extends StatelessWidget {
                       myID: myID,
                       isNewChat: isNewChat,
                       userChatItemDTO: userChatItemDTO,
+                      groupChatItemDTO: groupChatItemDTO,
                       token: token,
                     );
                   }
@@ -156,6 +162,7 @@ class _loadSuccessView extends StatelessWidget {
   final String myID;
   final String token;
   final UserChatItemDTO userChatItemDTO;
+  final GroupChatItemDTO groupChatItemDTO;
   final MessageDTO message;
 
   _loadSuccessView({
@@ -169,6 +176,7 @@ class _loadSuccessView extends StatelessWidget {
     required this.myID,
     required this.token,
     required this.userChatItemDTO,
+    required this.groupChatItemDTO,
     required this.message,
     this.image,
   }) : super(key: key);
@@ -186,7 +194,7 @@ class _loadSuccessView extends StatelessWidget {
                 // controller: scrollController,
                 itemCount: messages.length,
                 itemBuilder: (context, index) => Message(
-                  isGuest: messages[index]!.reciverID == myID,
+                  isGuest: messages[index]!.receiverID == myID,
                   image: image,
                   message: ChatMessageForShow(
                     id: 0,
@@ -206,6 +214,7 @@ class _loadSuccessView extends StatelessWidget {
             isGuest: isGuest,
             isNewChat: isNewChat,
             userChatItemDTO: userChatItemDTO,
+            groupChatItemDTO: groupChatItemDTO,
             token: token,
             receiverID: myID == userChatItemDTO.participant1ID
                 ? userChatItemDTO.participant2ID

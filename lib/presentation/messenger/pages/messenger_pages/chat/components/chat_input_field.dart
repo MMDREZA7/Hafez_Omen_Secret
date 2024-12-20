@@ -1,5 +1,6 @@
 import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
 import 'package:faleh_hafez/constants.dart';
+import 'package:faleh_hafez/domain/models/group_chat_dto%20copy.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
 
@@ -12,6 +13,7 @@ class ChatInputField extends StatefulWidget {
   final bool isGuest;
   final bool isNewChat;
   final UserChatItemDTO userChatItemDTO;
+  final GroupChatItemDTO groupChatItemDTO;
   final String receiverID;
   final String token;
   final MessageDTO message;
@@ -24,6 +26,7 @@ class ChatInputField extends StatefulWidget {
     required this.isGuest,
     required this.isNewChat,
     required this.userChatItemDTO,
+    required this.groupChatItemDTO,
     required this.receiverID,
     required this.token,
     required this.message,
@@ -122,11 +125,14 @@ class _ChatInputFieldState extends State<ChatInputField> {
                             context.read<MessagingBloc>().add(
                                   MessagingSendMessage(
                                     mobileNumber: widget.userChatItemDTO
-                                        .participant2MobileNumber,
+                                                .participant2MobileNumber ==
+                                            ''
+                                        ? widget.groupChatItemDTO.id
+                                        : widget.userChatItemDTO
+                                            .participant2MobileNumber,
                                     isNewChat: widget.isNewChat,
                                     chatID: widget.userChatItemDTO.id,
                                     message: MessageDTO(
-                                      reciverID: widget.message.reciverID,
                                       senderID: widget.message.senderID,
                                       text: _messageController.text,
                                       chatID: widget.message.chatID,
@@ -209,7 +215,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
                                         isNewChat: widget.isNewChat,
                                         chatID: widget.userChatItemDTO.id,
                                         message: MessageDTO(
-                                          reciverID: widget.message.reciverID,
                                           senderID: widget.message.senderID,
                                           text: _messageController.text,
                                           chatID: widget.message.chatID,
