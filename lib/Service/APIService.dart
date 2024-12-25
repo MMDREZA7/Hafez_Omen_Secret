@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:faleh_hafez/domain/models/group.dart';
-import 'package:faleh_hafez/domain/models/group_chat_dto%20copy.dart';
+import 'package:faleh_hafez/domain/models/group_chat_dto.dart';
+import 'package:faleh_hafez/domain/models/group_member.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
@@ -198,6 +198,110 @@ class APIService {
     }
   }
 
+  //* Group Member
+  Future<List<GroupMember>> getGroupMembers({
+    required String groupID,
+    required String token,
+  }) async {
+    final url = Uri.parse('$baseUrl/api/GroupMember/GetGroupMembers');
+
+    var bodyRequest = {
+      "groupID": groupID,
+    };
+
+    List<GroupMember> membersList = [];
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: json.encode(bodyRequest),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        var members = json.decode(response.body);
+
+        print("Members: ${members}");
+
+        for (var member in members) {
+          membersList.add(
+            GroupMember(
+              id: member["userID"],
+              mobileNumber: member["mobileNumber"],
+              userName: 'NULL',
+              // userName: member["username"],
+              type: groupMemberConvertToEnum[member["type"]]!,
+            ),
+          );
+        }
+
+        print("Members List to show: ${membersList}");
+
+        return membersList;
+      } else {
+        throw Exception(response);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<GroupMember>> addUserToGroup({
+    required String groupID,
+    required String userID,
+    required int role,
+    required String token,
+  }) async {
+    final url = Uri.parse('$baseUrl/api/GroupMember/AddToGroup');
+
+    var bodyRequest = {
+      "groupID": groupID,
+      "userID": userID,
+      "role": role,
+    };
+
+    print("URL: ${url}");
+    print("bodyRequest: ${bodyRequest}");
+
+    List<GroupMember> membersList = [];
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: json.encode(bodyRequest),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        var members = json.decode(response.body);
+
+        for (var member in members) {
+          membersList.add(
+            GroupMember(
+              id: member["userID"],
+              mobileNumber: member["mobileNumber"],
+              userName: member["username"],
+              // type: member[groupMemberConvertToEnum["type"]]!,
+              type: groupMemberConvertToEnum[member["type"]]!,
+            ),
+          );
+        }
+
+        return membersList;
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   //* Message
   Future<List<MessageDTO>> getChatMessages({
     required String chatID,
@@ -242,7 +346,7 @@ class APIService {
 
         return messagesList;
       } else {
-        throw Exception(response.reasonPhrase);
+        throw Exception(response.body);
       }
     } catch (e) {
       rethrow;

@@ -18,3 +18,27 @@ class ChatItemsGetPublicChatsEvent extends ChatItemsEvent {
     required this.token,
   });
 }
+
+class ChatItemsGetGroupMembersEvent extends ChatItemsEvent {
+  final String token;
+  final String groupID;
+
+  ChatItemsGetGroupMembersEvent({
+    required this.token,
+    required this.groupID,
+  });
+}
+
+class ChatItemsAddNewMemberToGroupEvent extends ChatItemsEvent {
+  final String token;
+  final String groupID;
+  final String mobileNumber;
+  final int role;
+
+  ChatItemsAddNewMemberToGroupEvent({
+    required this.token,
+    required this.groupID,
+    required this.mobileNumber,
+    required this.role,
+  });
+}

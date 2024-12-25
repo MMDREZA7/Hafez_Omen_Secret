@@ -26,6 +26,20 @@ class _HomePageState extends State<HomePage> {
       drawer: const MyDrawer(),
       appBar: AppBar(
         actions: [
+          // IconButton(
+          //   onPressed: () => showDialog(
+          //     context: context,
+          //     builder: (context) => const AddMemberDialog(
+          //       AddMemberBloc: ChatItems,
+          //       groupID: '',
+          //       groupName: "MMDREZA",
+          //       token: '',
+          //     ),
+          //   ),
+          //   icon: const Icon(
+          //     Icons.group,
+          //   ),
+          // ),
           IconButton(
             onPressed: () async {
               await showDialog(

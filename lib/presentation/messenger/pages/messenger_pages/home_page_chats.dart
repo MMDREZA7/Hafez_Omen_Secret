@@ -1,10 +1,8 @@
-import 'package:faleh_hafez/Service/APIService.dart';
 import 'package:faleh_hafez/application/chat_items/chat_items_bloc.dart';
-import 'package:faleh_hafez/domain/models/group_chat_dto%20copy.dart';
+import 'package:faleh_hafez/domain/models/group_chat_dto.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
-import 'package:faleh_hafez/presentation/messenger/components/bottom_navbar/bottom_navbar.dart';
 import 'package:faleh_hafez/presentation/messenger/components/drawer_chat.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/chat_page.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/public_chats_page.dart';
@@ -27,7 +25,8 @@ class _HomePageChatsState extends State<HomePageChats> {
   int currentIndexPage = 0;
 
   final TextEditingController _receiverMobileNumberController =
-      TextEditingController();
+      TextEditingController(text: "09");
+
   final box = Hive.box('mybox');
   var userProfile = User(
     id: 'id',
@@ -86,19 +85,20 @@ class _HomePageChatsState extends State<HomePageChats> {
             ),
           ),
           actions: [
-            Builder(builder: (context) {
-              return IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PublicChatsPage(),
-                    ),
-                  );
-                },
-                icon: Icon(Icons.add),
-              );
-            }),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PublicChatsPage(),
+                  ),
+                );
+              },
+              icon: Icon(
+                Icons.group_rounded,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
             Builder(builder: (context) {
               return IconButton(
                 onPressed: () => context.read<ChatItemsBloc>().add(
@@ -232,8 +232,6 @@ class _HomePageChatsState extends State<HomePageChats> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            _receiverMobileNumberController.clear();
-
             showDialog(
               context: context,
               builder: (context) => Dialog(
@@ -254,7 +252,17 @@ class _HomePageChatsState extends State<HomePageChats> {
                         ),
                         keyboardType: TextInputType.number,
                         controller: _receiverMobileNumberController,
+                        autofocus: true,
                         onEditingComplete: () {
+                          if (!_receiverMobileNumberController.text
+                              .startsWith("09")) {
+                            context.showErrorBar(
+                              content: const Text(
+                                'شماره موبایل باید با 09 شروع شود',
+                              ),
+                            );
+                            return;
+                          }
                           if (_receiverMobileNumberController.text == '') {
                             context.showErrorBar(
                               content: const Text(
@@ -322,6 +330,15 @@ class _HomePageChatsState extends State<HomePageChats> {
                       const SizedBox(height: 20),
                       TextButton(
                         onPressed: () {
+                          if (!_receiverMobileNumberController.text
+                              .startsWith("09")) {
+                            context.showErrorBar(
+                              content: const Text(
+                                'شماره موبایل باید با 09 شروع شود',
+                              ),
+                            );
+                            return;
+                          }
                           if (_receiverMobileNumberController.text == '') {
                             context.showErrorBar(
                               content: const Text(

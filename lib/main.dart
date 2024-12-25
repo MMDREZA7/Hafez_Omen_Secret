@@ -62,18 +62,14 @@ class MyApp extends StatelessWidget {
             child: BlocBuilder<ThemeChangerBloc, ThemeChangerState>(
               builder: (context, state) {
                 if (state is ThemeChangerLoaded) {
-                  // return MaterialApp(
-                  //   debugShowCheckedModeBanner: false,
-                  //   theme: state.theme,
-                  //   home: const HomePage(),
-                  // );
-
                   return MaterialApp(
                     debugShowCheckedModeBanner: false,
                     theme: state.theme,
                     home: BlocProvider(
-                      create: (context) =>
-                          ChatThemeChangerBloc()..add(FirstTimeOpenChat()),
+                      create: (context) => ChatThemeChangerBloc()
+                        ..add(
+                          FirstTimeOpenChat(),
+                        ),
                       child: const HomePage(),
                     ),
                   );

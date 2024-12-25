@@ -1,6 +1,6 @@
 import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
 import 'package:faleh_hafez/constants.dart';
-import 'package:faleh_hafez/domain/models/group_chat_dto%20copy.dart';
+import 'package:faleh_hafez/domain/models/group_chat_dto.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
 

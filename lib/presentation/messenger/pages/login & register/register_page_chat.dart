@@ -15,13 +15,15 @@ class RegisterPageMessenger extends StatefulWidget {
 }
 
 class _RegisterPageMessengerState extends State<RegisterPageMessenger> {
-  TextEditingController _mobileNumberController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _mobileNumberController =
+      TextEditingController(text: "09");
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
-  FocusNode _mobileNumberFocusNode = FocusNode();
-  FocusNode _passwordFocusNode = FocusNode();
-  FocusNode _confirmPasswordFocusNode = FocusNode();
+  final FocusNode _mobileNumberFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _confirmPasswordFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +72,7 @@ class _RegisterPageMessengerState extends State<RegisterPageMessenger> {
                             focusNode: _mobileNumberFocusNode,
                             controller: _mobileNumberController,
                             keyboardType: TextInputType.text,
+                            autofocus: true,
                             cursorColor: Colors.white,
                             onFieldSubmitted: (value) {
                               FocusScope.of(context)
@@ -163,12 +166,20 @@ class _RegisterPageMessengerState extends State<RegisterPageMessenger> {
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
-                            // ? on Editing compelete in confirm password
                             onEditingComplete: () {
                               if (_mobileNumberController.text.length != 11) {
                                 context.showErrorBar(
                                   content: const Text(
                                     'شماره موبایل باید 11 رقمی باشد',
+                                  ),
+                                );
+                                return;
+                              }
+                              if (!_mobileNumberController.text
+                                  .startsWith("09")) {
+                                context.showErrorBar(
+                                  content: const Text(
+                                    'شماره موبایل باید با 09 شروع شود',
                                   ),
                                 );
                                 return;
@@ -307,6 +318,15 @@ class _RegisterPageMessengerState extends State<RegisterPageMessenger> {
                               context.showErrorBar(
                                 content: const Text(
                                   'شماره موبایل باید 11 رقمی باشد',
+                                ),
+                              );
+                              return;
+                            }
+                            if (!_mobileNumberController.text
+                                .startsWith("09")) {
+                              context.showErrorBar(
+                                content: const Text(
+                                  'شماره موبایل باید با 09 شروع شود',
                                 ),
                               );
                               return;

@@ -1,8 +1,7 @@
 import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
-import 'package:faleh_hafez/domain/models/group_chat_dto%20copy.dart';
+import 'package:faleh_hafez/domain/models/group_chat_dto.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
-import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/home_page_chats.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +10,8 @@ import '../../../../../application/messaging/bloc/messaging_bloc.dart';
 import 'components/ChatPageMessagesView.dart';
 
 class ChatPage extends StatelessWidget {
+  final void Function()? onPressedGroupButton;
+  final IconData? icon;
   final String hostPublicID, guestPublicID, name;
   final bool isGuest;
   final String chatID;
@@ -33,6 +34,8 @@ class ChatPage extends StatelessWidget {
     required this.userChatItemDTO,
     required this.groupChatItemDTO,
     required this.message,
+    this.onPressedGroupButton,
+    this.icon,
     this.isNewChat = false,
   });
 
@@ -80,12 +83,7 @@ class ChatPage extends StatelessWidget {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       leading: IconButton(
-        onPressed: () => Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomePageChats(),
-          ),
-        ),
+        onPressed: () => Navigator.pop(context),
         icon: Icon(
           CupertinoIcons.back,
           color: Theme.of(context).colorScheme.onPrimary,
@@ -124,6 +122,18 @@ class ChatPage extends StatelessWidget {
         ],
       ),
       actions: [
+        Builder(
+          builder: (context) {
+            if (onPressedGroupButton != null) {
+              return IconButton(
+                onPressed: onPressedGroupButton,
+                icon: Icon(icon),
+              );
+            } else {
+              return SizedBox();
+            }
+          },
+        ),
         IconButton(
           icon: const Icon(Icons.refresh),
           onPressed: () {

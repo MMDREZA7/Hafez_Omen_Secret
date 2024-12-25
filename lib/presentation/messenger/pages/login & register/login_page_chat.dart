@@ -15,7 +15,8 @@ class LoginPageMessenger extends StatefulWidget {
 }
 
 class _LoginPageMessengerState extends State<LoginPageMessenger> {
-  final TextEditingController _mobileNumberController = TextEditingController();
+  final TextEditingController _mobileNumberController =
+      TextEditingController(text: "09");
   final TextEditingController _passwordController = TextEditingController();
 
   final FocusNode _mobileNumberFocusNode = FocusNode();
@@ -68,6 +69,7 @@ class _LoginPageMessengerState extends State<LoginPageMessenger> {
                           title: TextFormField(
                             focusNode: _mobileNumberFocusNode,
                             controller: _mobileNumberController,
+                            autofocus: true,
                             keyboardType: TextInputType.text,
                             cursorColor: Colors.white,
                             onFieldSubmitted: (value) {
@@ -134,6 +136,15 @@ class _LoginPageMessengerState extends State<LoginPageMessenger> {
                                       const Text("شماره باید 11 رقم باشد."),
                                 );
 
+                                return;
+                              }
+                              if (!_mobileNumberController.text
+                                  .startsWith("09")) {
+                                context.showErrorBar(
+                                  content: const Text(
+                                    'شماره موبایل باید با 09 شروع شود',
+                                  ),
+                                );
                                 return;
                               }
 
@@ -219,6 +230,15 @@ class _LoginPageMessengerState extends State<LoginPageMessenger> {
                                 content: const Text("شماره باید 11 رقم باشد."),
                               );
 
+                              return;
+                            }
+                            if (!_mobileNumberController.text
+                                .startsWith("09")) {
+                              context.showErrorBar(
+                                content: const Text(
+                                  'شماره موبایل باید با 09 شروع شود',
+                                ),
+                              );
                               return;
                             }
 
