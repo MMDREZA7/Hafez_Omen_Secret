@@ -167,7 +167,7 @@ class ChatItemsBloc extends Bloc<ChatItemsEvent, ChatItemsState> {
     } catch (e) {
       emit(
         ChatItemsGroupMembersError(
-          errorMessage: e.toString().split(":")[1],
+          errorMessage: e.toString().split(':')[1],
         ),
       );
     }

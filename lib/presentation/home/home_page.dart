@@ -27,17 +27,15 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         actions: [
           // IconButton(
-          //   onPressed: () => showDialog(
-          //     context: context,
-          //     builder: (context) => const AddMemberDialog(
-          //       AddMemberBloc: ChatItems,
-          //       groupID: '',
-          //       groupName: "MMDREZA",
-          //       token: '',
+          //   onPressed: () => Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => ExamplePage(),
           //     ),
           //   ),
           //   icon: const Icon(
           //     Icons.group,
+          //     color: Colors.black,
           //   ),
           // ),
           IconButton(
@@ -72,7 +70,7 @@ class _HomePageState extends State<HomePage> {
               Icons.help,
               color: Theme.of(context).colorScheme.onPrimary,
             ),
-          ),
+          )
         ],
         iconTheme: IconThemeData(
           color: Theme.of(context).colorScheme.onPrimary,

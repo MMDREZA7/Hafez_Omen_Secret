@@ -1,17 +1,25 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:faleh_hafez/Service/APIService.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:open_file/open_file.dart';
+
+import '../../../domain/file_handler/file_handler.dart';
 part 'messaging_event.dart';
 part 'messaging_state.dart';
 
 class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   late List<MessageDTO?> allMessagesList = [];
+  final fileHandler = FileHandler();
 
   MessagingBloc() : super(MessagingInitial()) {
     on<MessagingGetMessages>(_fetchMessages);
     on<MessagingSendMessage>(_sendMessage);
+    on<MessagingSendFileMessage>(_uploadFile);
+    on<MessagingDownloadFileMessage>(_downloadFile);
   }
 
   FutureOr<void> _fetchMessages(
@@ -43,7 +51,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     emit(MessagingLoading());
 
     try {
-      var otherID = null;
+      String? otherID = null;
 
       if (event.isNewChat) {
         var convertedID = await APIService().getUserID(
@@ -59,8 +67,9 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       await APIService()
           .sendMessage(
             token: event.token,
-            receiverID: otherID,
+            receiverID: otherID!,
             text: event.message.text!,
+            fileAttachmentID: event.message.attachFile!.fileAttachmentID,
           )
           .then(
             (value) => add(
@@ -72,6 +81,109 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
               ),
             ),
           );
+    } catch (e) {
+      emit(
+        MessagingError(
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> _uploadFile(
+    MessagingSendFileMessage event,
+    Emitter<MessagingState> emit,
+  ) async {
+    try {
+      final result = await FilePicker.platform.pickFiles();
+
+      if (result == null) return;
+
+      var file = result.files.first;
+
+      final response = await APIService().uploadFile(
+        filePath: file.path!,
+        description: 'Default Description',
+        token: event.token,
+        name: file.name,
+      )
+          //     .then(
+          //   (value) async {
+          //     await APIService().downladFile(
+          //       token: event.token,
+          //       id: value.id!,
+          //     );
+          //   },
+          // )
+          ;
+
+      print(response);
+
+      add(
+        MessagingSendMessage(
+          message: MessageDTO(
+            senderID: event.message.senderID,
+            text: event.message.attachFile!.fileName,
+            chatID: event.message.chatID,
+            groupID: event.message.groupID,
+            senderMobileNumber: event.message.senderMobileNumber,
+            receiverID: event.message.receiverID,
+            receiverMobileNumber: event.message.receiverMobileNumber,
+            sentDateTime: event.message.sentDateTime,
+            isRead: event.message.isRead,
+            attachFile: AttachmentFile(
+              fileAttachmentID: response.id,
+              fileName: event.message.attachFile?.fileName!,
+              fileSize: event.message.attachFile?.fileSize!,
+              fileType: event.message.attachFile?.fileType!,
+            ),
+          ),
+          chatID: event.message.chatID ?? event.message.groupID!,
+          isNewChat: event.isNewChat,
+          token: event.token,
+          mobileNumber: event.message.senderMobileNumber!,
+        ),
+      );
+
+      print(
+          "Response:${response.toString()}___________________________________________");
+    } catch (e) {
+      emit(
+        MessagingError(
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> _downloadFile(
+    MessagingDownloadFileMessage event,
+    Emitter<MessagingState> emit,
+  ) async {
+    try {
+      File? existingFile = await fileHandler.getFile(
+        fileID: event.fileID,
+        fileType: event.fileType,
+      );
+
+      if (existingFile != null) {
+        await OpenFile.open(existingFile.path);
+      }
+
+      final response = await APIService().downloadFile(
+        id: event.fileID,
+        token: event.token,
+      );
+
+      File? createdFile = await fileHandler.attachFileCaching(
+        data: response,
+        fileID: event.fileID,
+        fileName: event.fileName,
+        fileSize: event.fileSize,
+        fileType: event.fileType,
+      );
+
+      await OpenFile.open(createdFile!.path);
     } catch (e) {
       emit(
         MessagingError(

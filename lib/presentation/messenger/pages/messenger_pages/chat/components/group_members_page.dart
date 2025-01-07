@@ -140,7 +140,8 @@ class _GroupMemberspageState extends State<GroupMemberspage> {
                               ),
                             ),
                             leading: Icon(
-                              state.groupMembers[index].id == widget.adminID
+                              state.groupMembers[index].type.toString() ==
+                                      'UserType.Admin'
                                   ? Icons.admin_panel_settings
                                   : Icons.person,
                               color: Theme.of(context).colorScheme.onPrimary,
@@ -162,7 +163,11 @@ class _GroupMemberspageState extends State<GroupMemberspage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(state.errorMessage),
+                        Text(
+                          state.errorMessage.contains('Bad')
+                              ? "مشکلی پیش آمده است مجددا تلاش کنید"
+                              : state.errorMessage,
+                        ),
                       ],
                     ),
                   );

@@ -2,6 +2,7 @@ import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bl
 import 'package:faleh_hafez/domain/models/group_chat_dto.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
+import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/components/file_message.dart';
 
 import '../../../../../../application/messaging/bloc/messaging_bloc.dart';
 import '../../../../../core/empty_view.dart';
@@ -191,19 +192,37 @@ class _loadSuccessView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: ListView.builder(
-                // controller: scrollController,
                 itemCount: messages.length,
-                itemBuilder: (context, index) => Message(
-                  isGuest: messages[index]!.receiverID == myID,
-                  image: image,
-                  message: ChatMessageForShow(
-                    id: 0,
-                    // messages[index]!.id,
-                    messageStatus: MessageStatus.viewed,
-                    isSender: messages[index]!.senderID == myID,
-                    text: messages[index]!.text!,
-                  ),
-                ),
+                itemBuilder: (context, index) {
+                  if (messages[index]!.attachFile != null) {
+                    return FileMessage(
+                      messageDto: messages[index],
+                      message: ChatMessageForShow(
+                        id: 0,
+                        messageStatus: MessageStatus.viewed,
+                        isSender: messages[index]!.senderID == myID,
+                        text: messages[index]!.text!,
+                        messageMode: MessageMode.file,
+                      ),
+                      token: token,
+                    );
+                  }
+
+                  return Message(
+                    isGuest: messages[index]!.receiverID == myID,
+                    image: image,
+                    message: ChatMessageForShow(
+                      messageMode: message.text != ''
+                          ? MessageMode.file
+                          : MessageMode.text,
+                      id: 0,
+                      // messages[index]!.id,
+                      messageStatus: MessageStatus.viewed,
+                      isSender: messages[index]!.senderID == myID,
+                      text: messages[index]!.text!,
+                    ),
+                  );
+                },
               ),
             ),
           ),
