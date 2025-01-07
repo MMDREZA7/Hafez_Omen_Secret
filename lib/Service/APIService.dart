@@ -249,30 +249,52 @@ class APIService {
             "Content-Type": "application/json",
             "Authorization": "Bearer $token",
           },
+<<<<<<< HEAD
           responseType: ResponseType.bytes,
+=======
+          responseType: ResponseType.bytes, // Ensures response is raw bytes
+>>>>>>> 14a1c8d35e729ed0fb4c0266c455d141725f2227
         ),
         // data: bodyRequest,
       );
 
       print("Body Request: $bodyRequest");
 
+<<<<<<< HEAD
+=======
+      // Check status code for success
+>>>>>>> 14a1c8d35e729ed0fb4c0266c455d141725f2227
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("Response: ${response.statusCode}");
         print("Downloaded File Bytes: ${response.data}");
 
+<<<<<<< HEAD
         return response.data as List<int>;
+=======
+        return response.data as List<int>; // Return raw bytes
+>>>>>>> 14a1c8d35e729ed0fb4c0266c455d141725f2227
       } else {
         print("Unexpected Response: ${response.statusCode} - ${response.data}");
         throw Exception(
             'Failed to download file. Status: ${response.statusCode}');
       }
     } catch (e) {
+<<<<<<< HEAD
       if (e is DioException) {
         if (e.response?.statusCode == 404) {
           throw Exception("The requested file was not found on the server.");
         }
       }
       print("Error occurred: $e");
+=======
+      // if (e is DioException) {
+      //   if (e.response?.statusCode == 404) {
+      //     print("File not found: ${e.response?.data}");
+      //     throw Exception("The requested file was not found on the server.");
+      //   }
+      // }
+      // print("Error occurred: $e");
+>>>>>>> 14a1c8d35e729ed0fb4c0266c455d141725f2227
       rethrow;
     }
   }
