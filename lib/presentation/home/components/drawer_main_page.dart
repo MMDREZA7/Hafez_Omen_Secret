@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'package:faleh_hafez/application/authentiction/authentication_bloc.dart';
 import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
-import 'package:faleh_hafez/application/omen_list/omen_list_bloc.dart';
+import 'package:faleh_hafez/application/omen_list/omen_bloc.dart';
+import 'package:faleh_hafez/application/omen_list/omens.dart';
 import 'package:faleh_hafez/application/theme_changer/theme_changer_bloc.dart';
 import 'package:faleh_hafez/presentation/about/about_us.dart';
 import 'package:faleh_hafez/presentation/home/components/exit_button.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/login%20&%20register/login_page_chat.dart';
 import 'package:faleh_hafez/presentation/themes/theme.dart';
+import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'button.dart';
@@ -154,6 +156,61 @@ class _MyDrawerState extends State<MyDrawer> {
                             ),
                             border: InputBorder.none,
                           ),
+                          onEditingComplete: () {
+                            if (_searchController.text == '786') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (context) => AuthenticationBloc(),
+                                    child: MaterialApp(
+                                      theme: secretPageTheme,
+                                      home: BlocProvider(
+                                        create: (context) =>
+                                            ChatThemeChangerBloc()
+                                              ..add(FirstTimeOpenChat()),
+                                        child: const LoginPageMessenger(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+                            if (int.parse(_searchController.text) < 0) {
+                              context.showErrorBar(
+                                content: const Text(
+                                  'عدد غزل ها از عدد 1 شروع میشود',
+                                ),
+                              );
+                              return;
+                            }
+                            if (int.parse(_searchController.text) >
+                                omens.length - 1) {
+                              context.showErrorBar(
+                                content: Text(
+                                  'تعداد غزل ها :${omens.length - 1} اما شما بیشتر ورودی شما بیشتر از تعداد غزل ها بود\n مجددا امتحان کنید',
+                                ),
+                              );
+                              return;
+                            } else {
+                              if (_searchController.text.isNotEmpty) {
+                                context.read<OmenBloc>().add(
+                                      OmenSearchedEvent(
+                                        searchIndex: _searchController.text,
+                                      ),
+                                    );
+
+                                Navigator.pop(context);
+                              } else {
+                                context.showErrorBar(
+                                  content: const Text(
+                                    'لطفا عددی وارد کنید یا دکمه انصراف را بزنید',
+                                  ),
+                                );
+                              }
+                            }
+                          },
                         ),
                       ),
                     ),
@@ -182,7 +239,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           MaterialButton(
                             color: Theme.of(context).colorScheme.onPrimary,
                             onPressed: () {
-                              if (_searchController.text == '159') {
+                              if (_searchController.text == '786') {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -201,8 +258,8 @@ class _MyDrawerState extends State<MyDrawer> {
                                 );
                               } else {
                                 if (_searchController.text.isNotEmpty) {
-                                  context.read<OmenListBloc>().add(
-                                        OmenListShowOmenEvent(),
+                                  context.read<OmenBloc>().add(
+                                        OmenGetRandomEvent(),
                                       );
 
                                   Navigator.pop(context);

@@ -1,5 +1,5 @@
 import 'package:faleh_hafez/application/authentiction/authentication_bloc.dart';
-import 'package:faleh_hafez/domain/user_reginster_login_dto.dart';
+import 'package:faleh_hafez/domain/models/user_reginster_login_dto.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/login%20&%20register/register_page_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +15,8 @@ class LoginPageMessenger extends StatefulWidget {
 }
 
 class _LoginPageMessengerState extends State<LoginPageMessenger> {
-  final TextEditingController _mobileNumberController = TextEditingController();
+  final TextEditingController _mobileNumberController =
+      TextEditingController(text: "09");
   final TextEditingController _passwordController = TextEditingController();
 
   final FocusNode _mobileNumberFocusNode = FocusNode();
@@ -68,6 +69,7 @@ class _LoginPageMessengerState extends State<LoginPageMessenger> {
                           title: TextFormField(
                             focusNode: _mobileNumberFocusNode,
                             controller: _mobileNumberController,
+                            autofocus: true,
                             keyboardType: TextInputType.text,
                             cursorColor: Colors.white,
                             onFieldSubmitted: (value) {
@@ -127,6 +129,45 @@ class _LoginPageMessengerState extends State<LoginPageMessenger> {
                                 fontSize: 22,
                               ),
                             ),
+                            onEditingComplete: () {
+                              if (_mobileNumberController.text.length != 11) {
+                                context.showErrorBar(
+                                  content:
+                                      const Text("شماره باید 11 رقم باشد."),
+                                );
+
+                                return;
+                              }
+                              if (!_mobileNumberController.text
+                                  .startsWith("09")) {
+                                context.showErrorBar(
+                                  content: const Text(
+                                    'شماره موبایل باید با 09 شروع شود',
+                                  ),
+                                );
+                                return;
+                              }
+
+                              if (_mobileNumberController.text == "" ||
+                                  _passwordController.text == "") {
+                                context.showErrorBar(
+                                  content: const Text(
+                                      "فیلدهای موبایل و پسورد الزامی هستند."),
+                                );
+
+                                return;
+                              }
+
+                              context.read<AuthenticationBloc>().add(
+                                    LoginUser(
+                                      user: UserRegisterLoginDTO(
+                                        password: _passwordController.text,
+                                        mobileNumber:
+                                            _mobileNumberController.text,
+                                      ),
+                                    ),
+                                  );
+                            },
                           ),
                         ),
                       ),
@@ -145,16 +186,12 @@ class _LoginPageMessengerState extends State<LoginPageMessenger> {
                                   if (themeChanger is ChatThemeChangerLoaded) {
                                     return MaterialApp(
                                       theme: themeChanger.theme,
-                                      home: HomePageChats(
-                                        user: state.user,
-                                      ),
+                                      home: const HomePageChats(),
                                     );
                                   }
                                   return MaterialApp(
                                     theme: themeChanger.theme,
-                                    home: HomePageChats(
-                                      user: state.user,
-                                    ),
+                                    home: const HomePageChats(),
                                   );
                                 },
                               ),
@@ -193,6 +230,15 @@ class _LoginPageMessengerState extends State<LoginPageMessenger> {
                                 content: const Text("شماره باید 11 رقم باشد."),
                               );
 
+                              return;
+                            }
+                            if (!_mobileNumberController.text
+                                .startsWith("09")) {
+                              context.showErrorBar(
+                                content: const Text(
+                                  'شماره موبایل باید با 09 شروع شود',
+                                ),
+                              );
                               return;
                             }
 
