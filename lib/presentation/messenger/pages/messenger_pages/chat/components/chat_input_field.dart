@@ -62,32 +62,35 @@ class _ChatInputFieldState extends State<ChatInputField> {
       child: SafeArea(
         child: Row(
           children: [
-            // BlocBuilder<MessagingBloc, MessagingState>(
-            //   builder: (context, state) {
-            //     return IconButton(
-            //       onPressed: () {
-            //         context.read<MessagingBloc>().add(
-            //               MessagingSendFileMessage(
-            //                 // senderPublicID: widget.isGuest
-            //                 //             ? widget.hostPublicID
-            //                 //             : widget.guestPublicID,
-            //                 //         receiverPublicID: widget.isGuest
-            //                 //             ? widget.guestPublicID
-            //                 //             : widget.hostPublicID,
-            //                 message: MessageDTO(
-            //                   reciverID: '',
-            //                   text: '',
-            //                 ),
-            //               ),
-            //             );
-            //       },
-            //       icon: const Icon(
-            //         Icons.attach_file,
-            //         color: kPrimaryColor,
-            //       ),
-            //     );
-            //   },
-            // ),
+            BlocBuilder<MessagingBloc, MessagingState>(
+              builder: (context, state) {
+                return IconButton(
+                  onPressed: () {
+                    context.read<MessagingBloc>().add(
+                          MessagingSendFileMessage(
+                            token: widget.token,
+                            isNewChat: widget.isNewChat,
+                            message: widget.message,
+                            // senderPublicID: widget.isGuest
+                            //     ? widget.hostPublicID
+                            //     : widget.guestPublicID,
+                            // receiverPublicID: widget.isGuest
+                            //     ? widget.guestPublicID
+                            //     : widget.hostPublicID,
+                            // message: MessageDTO(
+                            //   reciverID: '',
+                            //   text: '',
+                            // ),
+                          ),
+                        );
+                  },
+                  icon: const Icon(
+                    Icons.attach_file,
+                    color: kPrimaryColor,
+                  ),
+                );
+              },
+            ),
             const SizedBox(width: kDefaultPadding),
             Expanded(
               child: Container(
@@ -144,6 +147,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                                           widget.message.receiverMobileNumber,
                                       sentDateTime: widget.message.sentDateTime,
                                       isRead: widget.message.isRead,
+                                      attachFile: widget.message.attachFile,
                                     ),
                                     token: widget.token,
                                   ),
@@ -177,25 +181,22 @@ class _ChatInputFieldState extends State<ChatInputField> {
                       ),
                     ),
                     _messageController.value == ''
-                        ? const Row(
+                        ? Row(
                             children: [
-                              // Icon(
-                              //   Icons.attach_file,
-                              //   color: Theme.of(context)
-                              //       .textTheme
-                              //       .bodyText1!
-                              //       .color!
-                              //       .withOpacity(0.64),
-                              // ),
-                              // const SizedBox(width: kDefaultPadding / 4),
-                              // Icon(
-                              //   Icons.camera_alt_outlined,
-                              //   color: Theme.of(context)
-                              //       .textTheme
-                              //       .bodyText1!
-                              //       .color!
-                              //       .withOpacity(0.64),
-                              // ),
+                              Icon(
+                                Icons.attach_file,
+                                color:
+                                    Theme.of(context).colorScheme.onSecondary,
+                              ),
+                              const SizedBox(width: kDefaultPadding / 4),
+                              Icon(
+                                Icons.camera_alt_outlined,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color!
+                                    .withOpacity(0.64),
+                              ),
                             ],
                           )
                         : TextButton(
@@ -215,6 +216,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                                         isNewChat: widget.isNewChat,
                                         chatID: widget.userChatItemDTO.id,
                                         message: MessageDTO(
+                                          attachFile: widget.message.attachFile,
                                           senderID: widget.message.senderID,
                                           text: _messageController.text,
                                           chatID: widget.message.chatID,

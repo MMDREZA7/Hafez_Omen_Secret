@@ -4,6 +4,7 @@ import 'package:faleh_hafez/application/omen_list/omen_bloc.dart';
 import 'package:faleh_hafez/application/theme_changer/theme_changer_bloc.dart';
 import 'package:faleh_hafez/presentation/home/home_page.dart';
 import 'package:faleh_hafez/presentation/home/components/splash_page.dart';
+import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/home_page_chats.dart';
 import 'package:faleh_hafez/presentation/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -70,7 +71,8 @@ class MyApp extends StatelessWidget {
                         ..add(
                           FirstTimeOpenChat(),
                         ),
-                      child: const HomePage(),
+                      child: const HomePageChats(),
+                      // child: const HomePage(),
                     ),
                   );
                 } else {

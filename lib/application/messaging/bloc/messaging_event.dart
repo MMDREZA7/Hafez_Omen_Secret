@@ -38,18 +38,44 @@ class MessagingSendMessage extends MessagingEvent {
       ];
 }
 
-// class MessagingSendFileMessage extends MessagingEvent {
-//   final MessageDTO message;
+class MessagingSendFileMessage extends MessagingEvent {
+  final MessageDTO message;
+  final bool isNewChat;
+  final String token;
 
-//   const MessagingSendFileMessage({
-//     required this.message,
-//   });
+  const MessagingSendFileMessage({
+    required this.message,
+    required this.token,
+    required this.isNewChat,
+  });
 
-//   @override
-//   List<Object> get props => [
-//         message,
-//       ];
-// }
+  @override
+  List<Object> get props => [
+        message,
+      ];
+}
+
+class MessagingDownloadFileMessage extends MessagingEvent {
+  final String fileID;
+  final String fileName;
+  final int fileSize;
+  final String fileType;
+  final String token;
+
+  const MessagingDownloadFileMessage({
+    required this.fileID,
+    required this.fileName,
+    required this.fileSize,
+    required this.fileType,
+    required this.token,
+  });
+
+  @override
+  List<Object> get props => [
+        fileID,
+        token,
+      ];
+}
 
 // class MessagingSeenMessage extends MessagingEvent {
 //   final MessageDTO message;

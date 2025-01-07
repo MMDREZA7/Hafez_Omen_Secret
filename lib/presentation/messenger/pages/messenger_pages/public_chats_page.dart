@@ -1,5 +1,6 @@
 import 'package:faleh_hafez/Service/APIService.dart';
 import 'package:faleh_hafez/application/chat_items/chat_items_bloc.dart';
+import 'package:faleh_hafez/application/messaging/bloc/messaging_bloc.dart';
 import 'package:faleh_hafez/domain/models/group_chat_dto.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user.dart';
@@ -7,6 +8,7 @@ import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
 import 'package:faleh_hafez/presentation/messenger/components/drawer_chat.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/chat_page.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/components/group_members_page.dart';
+import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/models/chat_message_for_show.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -144,6 +146,12 @@ class _PublicChatsPageState extends State<PublicChatsPage> {
                             },
                             isNewChat: false,
                             message: MessageDTO(
+                              attachFile: AttachmentFile(
+                                fileAttachmentID: '',
+                                fileName: '',
+                                fileSize: 0,
+                                fileType: '',
+                              ),
                               senderID: hostID,
                               text: '',
                               chatID: '',
@@ -256,7 +264,7 @@ class _PublicChatsPageState extends State<PublicChatsPage> {
 
                             context.showSuccessBar(
                               content: const Text(
-                                'برای مشاهده گروه اضافه شده، صفحه را ریفرش کنید',
+                                'برای مشاهده گروه های اضافه شده، صفحه را ریفرش کنید',
                               ),
                             );
 
