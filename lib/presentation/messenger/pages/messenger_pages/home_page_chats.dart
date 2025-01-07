@@ -5,7 +5,6 @@ import 'package:faleh_hafez/domain/models/user.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
 import 'package:faleh_hafez/presentation/messenger/components/drawer_chat.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/chat_page.dart';
-import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/models/chat_message_for_show.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/public_chats_page.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,13 +38,13 @@ class _HomePageChatsState extends State<HomePageChats> {
   void initState() {
     super.initState();
 
-    box.put("userID", '01896d10-eb45-4007-d058-08dd2cc521d1');
-    box.put("userMobile", '09000000000');
-    box.put(
-      "userToken",
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTg5NmQxMC1lYjQ1LTQwMDctZDA1OC0wOGRkMmNjNTIxZDEiLCJ1bmlxdWVfbmFtZSI6IjA5MDAwMDAwMDAwIiwibmJmIjoxNzM2MjcyODQxLCJleHAiOjE3MzYyODA2NDEsImlhdCI6MTczNjI3Mjg0MSwiaXNzIjoiWW91ckFQSSIsImF1ZCI6IllvdXJBUElVc2VycyJ9.XgDHildvZoGL1Uj4qMsDXrOEXRTG5oSU5Pt3iyNmZpg',
-    );
-    box.put("userType", '2');
+    // box.put("userID", '01896d10-eb45-4007-d058-08dd2cc521d1');
+    // box.put("userMobile", '09000000000');
+    // box.put(
+    //   "userToken",
+    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTg5NmQxMC1lYjQ1LTQwMDctZDA1OC0wOGRkMmNjNTIxZDEiLCJ1bmlxdWVfbmFtZSI6IjA5MDAwMDAwMDAwIiwibmJmIjoxNzM2MjgxMDY4LCJleHAiOjE3MzYyODg4NjgsImlhdCI6MTczNjI4MTA2OCwiaXNzIjoiWW91ckFQSSIsImF1ZCI6IllvdXJBUElVc2VycyJ9.L70vUNJPTV1JOCcHF3VfQcrI7ma5J2Mw-KOXU20Rukw',
+    // );
+    // box.put("userType", '2');
 
     final String id = box.get('userID');
     final String mobileNumber = box.get('userMobile');

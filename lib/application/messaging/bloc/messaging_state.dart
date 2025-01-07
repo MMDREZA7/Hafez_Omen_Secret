@@ -30,13 +30,21 @@ class MessagingError extends MessagingState {
   const MessagingError({required this.errorMessage});
 }
 
-class MessagingUploadFileLoading extends MessagingState {}
+class MessagingFileLoading extends MessagingState {}
 
 class MessagingUploadFileLoaded extends MessagingState {
   final File file;
 
   const MessagingUploadFileLoaded({
     required this.file,
+  });
+}
+
+class MessagingUploadFileLoading extends MessagingState {
+  final String fileName;
+
+  const MessagingUploadFileLoading({
+    required this.fileName,
   });
 }
 

@@ -93,14 +93,44 @@ class _ChatPageState extends State<ChatPage> {
             );
         }
       },
-      child: Builder(
-        builder: (context) {
-          return Scaffold(
-            appBar: buildAppBar(context),
-            body: BlocProvider(
-              create: (context) =>
-                  ChatThemeChangerBloc()..add(FirstTimeOpenChat()),
-              child: ChatPageMessagesListView(
+      child: Scaffold(
+        appBar: buildAppBar(context),
+        body: BlocProvider(
+          create: (context) => ChatThemeChangerBloc()..add(FirstTimeOpenChat()),
+          child:
+              // BlocBuilder<MessagingBloc, MessagingState>(
+              //   builder: (context, state) {
+              //     if (state is MessagingFileLoading) {
+              //       context.showInfoBar(
+              //         content: Container(
+              //           decoration: BoxDecoration(
+              //             color: Colors.grey[100],
+              //             borderRadius: BorderRadius.circular(15),
+              //           ),
+              //           child: const ListTile(
+              //             leading: CircularProgressIndicator(),
+              //             title: Text("File Uploding"),
+              //           ),
+              //         ),
+              //       );
+              //     }
+              // return
+              BlocBuilder<MessagingBloc, MessagingState>(
+            builder: (context, state) {
+              if (state is MessagingFileLoading) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: const ListTile(
+                    leading: CircularProgressIndicator(),
+                    title: Text("File Uploding"),
+                  ),
+                );
+              }
+
+              return ChatPageMessagesListView(
                 message: MessageDTO(
                   senderID: widget.message.senderID,
                   text: widget.message.text,
@@ -121,10 +151,10 @@ class _ChatPageState extends State<ChatPage> {
                 userChatItemDTO: widget.userChatItemDTO,
                 token: widget.token,
                 groupChatItemDTO: widget.groupChatItemDTO,
-              ),
-            ),
-          );
-        },
+              );
+            },
+          ),
+        ),
       ),
     );
   }

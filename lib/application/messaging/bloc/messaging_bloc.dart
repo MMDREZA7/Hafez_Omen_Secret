@@ -160,6 +160,8 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     MessagingDownloadFileMessage event,
     Emitter<MessagingState> emit,
   ) async {
+    emit(MessagingFileLoading());
+
     try {
       File? existingFile = await fileHandler.getFile(
         fileID: event.fileID,

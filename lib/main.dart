@@ -71,8 +71,8 @@ class MyApp extends StatelessWidget {
                         ..add(
                           FirstTimeOpenChat(),
                         ),
-                      child: const HomePageChats(),
-                      // child: const HomePage(),
+                      // child: const HomePageChats(),
+                      child: const HomePage(),
                     ),
                   );
                 } else {
