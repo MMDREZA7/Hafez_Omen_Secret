@@ -1,4 +1,3 @@
-import 'package:faleh_hafez/application/authentiction/authentication_bloc.dart';
 import 'package:faleh_hafez/domain/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
     //   token: 'asg561asg32sa1gasgsa54651sa6g51as65g165',
     //   type: UserType.Regular,
     // );
+    // ignore: unused_local_variable
     final user = User(
       id: box.get("userID"),
       mobileNumber: box.get("userMobile"),

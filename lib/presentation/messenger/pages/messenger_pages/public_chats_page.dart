@@ -1,14 +1,10 @@
 import 'package:faleh_hafez/Service/APIService.dart';
 import 'package:faleh_hafez/application/chat_items/chat_items_bloc.dart';
-import 'package:faleh_hafez/application/messaging/bloc/messaging_bloc.dart';
-import 'package:faleh_hafez/domain/models/group_chat_dto.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:faleh_hafez/domain/models/user.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
-import 'package:faleh_hafez/presentation/messenger/components/drawer_chat.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/chat_page.dart';
 import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/components/group_members_page.dart';
-import 'package:faleh_hafez/presentation/messenger/pages/messenger_pages/chat/models/chat_message_for_show.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -117,6 +113,7 @@ class _PublicChatsPageState extends State<PublicChatsPage> {
                 itemCount: state.groupChatItem.length,
                 itemBuilder: (context, index) {
                   final chatItem = state.groupChatItem[index];
+                  // ignore: unused_local_variable
                   final isHost = userProfile.id == chatItem.id;
                   final hostID = userProfile.id;
                   final guestID = chatItem.id;

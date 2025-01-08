@@ -4,9 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:faleh_hafez/Service/APIService.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
 import 'package:equatable/equatable.dart';
-import 'package:faleh_hafez/domain/models/user.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:open_file/open_file.dart';
 
 import '../../../domain/file_handler/file_handler.dart';
