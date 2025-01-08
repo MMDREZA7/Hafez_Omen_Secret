@@ -132,12 +132,16 @@ class _ChatPageState extends State<ChatPage> {
 
               return ChatPageMessagesListView(
                 message: MessageDTO(
-                  senderID: widget.message.senderID,
+                  senderID: widget.message.senderID == userProfile.id
+                      ? widget.message.senderID
+                      : widget.message.receiverID,
                   text: widget.message.text,
                   chatID: widget.message.chatID,
                   groupID: widget.message.groupID,
                   senderMobileNumber: widget.message.senderMobileNumber,
-                  receiverID: widget.message.receiverID,
+                  receiverID: widget.message.receiverID == userProfile.id
+                      ? widget.message.senderID
+                      : widget.message.receiverID,
                   receiverMobileNumber: widget.message.receiverMobileNumber,
                   sentDateTime: widget.message.sentDateTime,
                   isRead: widget.message.isRead,
@@ -187,7 +191,10 @@ class _ChatPageState extends State<ChatPage> {
                 );
               } else if (state is MessagingLoaded) {
                 return Text(
-                  widget.userChatItemDTO.participant2MobileNumber,
+                  widget.userChatItemDTO.participant2MobileNumber ==
+                          userProfile.mobileNumber
+                      ? widget.userChatItemDTO.participant1MobileNumber
+                      : widget.userChatItemDTO.participant2MobileNumber,
                   // widget.userChatItemDTO.participant1MobileNumber,
                   style: const TextStyle(fontSize: 15),
                 );
@@ -198,31 +205,30 @@ class _ChatPageState extends State<ChatPage> {
                 );
               }
             },
-          )
+          ),
         ],
       ),
       actions: [
-        Builder(
-          builder: (context) {
-            if (widget.onPressedGroupButton != null) {
-              return IconButton(
-                onPressed: widget.onPressedGroupButton,
-                icon: Icon(widget.icon),
-              );
-            } else {
-              return const SizedBox();
-            }
-          },
+        Visibility(
+          visible: widget.onPressedGroupButton != null,
+          child: IconButton(
+            onPressed: widget.onPressedGroupButton,
+            icon: Icon(widget.icon),
+          ),
         ),
-        IconButton(
-          icon: const Icon(Icons.refresh),
-          onPressed: () {
-            context.read<MessagingBloc>().add(
-                  MessagingGetMessages(
-                    chatID: widget.chatID,
-                    token: widget.token,
-                  ),
-                );
+        BlocBuilder<MessagingBloc, MessagingState>(
+          builder: (context, state) {
+            return IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () {
+                context.read<MessagingBloc>().add(
+                      MessagingGetMessages(
+                        chatID: widget.chatID,
+                        token: widget.token,
+                      ),
+                    );
+              },
+            );
           },
         ),
       ],

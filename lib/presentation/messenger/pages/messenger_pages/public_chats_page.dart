@@ -244,7 +244,7 @@ class _PublicChatsPageState extends State<PublicChatsPage> {
                         decoration: const InputDecoration(
                           labelText: 'Enter Group Name',
                         ),
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         controller: _groupNameController,
                         onEditingComplete: () async {
                           if (_groupNameController.text == '') {

@@ -38,21 +38,18 @@ class _HomePageChatsState extends State<HomePageChats> {
   void initState() {
     super.initState();
 
-    // box.put("userID", '01896d10-eb45-4007-d058-08dd2cc521d1');
-    // box.put("userMobile", '09000000000');
-    // box.put(
-    //   "userToken",
-    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTg5NmQxMC1lYjQ1LTQwMDctZDA1OC0wOGRkMmNjNTIxZDEiLCJ1bmlxdWVfbmFtZSI6IjA5MDAwMDAwMDAwIiwibmJmIjoxNzM2MjgxMDY4LCJleHAiOjE3MzYyODg4NjgsImlhdCI6MTczNjI4MTA2OCwiaXNzIjoiWW91ckFQSSIsImF1ZCI6IllvdXJBUElVc2VycyJ9.L70vUNJPTV1JOCcHF3VfQcrI7ma5J2Mw-KOXU20Rukw',
-    // );
+    // box.put("userID", '77a16c07-2bba-4706-d059-08dd2cc521d1');
+    // box.put("userMobile", '09000000001');
+    // box.put("userToken",
+    //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI3N2ExNmMwNy0yYmJhLTQ3MDYtZDA1OS0wOGRkMmNjNTIxZDEiLCJ1bmlxdWVfbmFtZSI6IjA5MDAwMDAwMDAxIiwibmJmIjoxNzM2MzI3NDc4LCJleHAiOjE3MzYzMzUyNzgsImlhdCI6MTczNjMyNzQ3OCwiaXNzIjoiWW91ckFQSSIsImF1ZCI6IllvdXJBUElVc2VycyJ9.CteBrJDJg60YiNxGY-JUfBk3uQqptmADEQ24ei92QCo"
+    //     // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTg5NmQxMC1lYjQ1LTQwMDctZDA1OC0wOGRkMmNjNTIxZDEiLCJ1bmlxdWVfbmFtZSI6IjA5MDAwMDAwMDAwIiwibmJmIjoxNzM2MzI0ODY0LCJleHAiOjE3MzYzMzI2NjQsImlhdCI6MTczNjMyNDg2NCwiaXNzIjoiWW91ckFQSSIsImF1ZCI6IllvdXJBUElVc2VycyJ9._GlnchzZLLlyzyJNMwv2gpfz1ukk4g37cCL_9VbKgoE',
+    //     );
     // box.put("userType", '2');
 
     final String id = box.get('userID');
     final String mobileNumber = box.get('userMobile');
     final String token = box.get('userToken');
-    // ignore: unused_local_variable
     final String type = box.get('userType');
-
-    // var typeInt = int.tryParse(type);
 
     var userType = int.parse(type);
 
@@ -61,16 +58,8 @@ class _HomePageChatsState extends State<HomePageChats> {
       mobileNumber: mobileNumber,
       token: token,
       type: userTypeConvertToEnum[userType]!,
-      // type: typeInt[userTypeConvertToEnum],
-      // type: typeInt[userTypeConvertToEnum],
     );
   }
-
-  // @override
-  // void dispose() {
-  //   _receiverUserIDController.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -153,11 +142,11 @@ class _HomePageChatsState extends State<HomePageChats> {
                   final chatItem = state.userChatItems[index];
                   final isHost = userProfile.id == chatItem.participant1ID;
                   final hostID = isHost
-                      ? chatItem.participant1ID
-                      : chatItem.participant2ID;
-                  final guestID = isHost
                       ? chatItem.participant2ID
                       : chatItem.participant1ID;
+                  final guestID = isHost
+                      ? chatItem.participant1ID
+                      : chatItem.participant2ID;
 
                   return GestureDetector(
                     onTap: () {

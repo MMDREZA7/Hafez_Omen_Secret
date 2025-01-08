@@ -1,8 +1,9 @@
-import 'package:faleh_hafez/application/chat_theme_changer/chat_theme_changer_bloc.dart';
 import 'package:faleh_hafez/constants.dart';
 import 'package:faleh_hafez/domain/models/group_chat_dto.dart';
 import 'package:faleh_hafez/domain/models/massage_dto.dart';
+import 'package:faleh_hafez/domain/models/user.dart';
 import 'package:faleh_hafez/domain/models/user_chat_dto.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../../../../application/messaging/bloc/messaging_bloc.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,31 @@ class _ChatInputFieldState extends State<ChatInputField> {
   final _messageController = TextEditingController();
   final _messageFocusNode = FocusNode();
   // var _textDirection = ui.TextDirection.rtl;
+
+  final box = Hive.box('mybox');
+  var userProfile = User(
+    id: 'id',
+    mobileNumber: 'mobileNumber',
+    token: 'token',
+    type: UserType.Guest,
+  );
+  @override
+  void initState() {
+    super.initState();
+    final String id = box.get('userID');
+    final String mobileNumber = box.get('userMobile');
+    final String token = box.get('userToken');
+    final String type = box.get('userType');
+
+    var userType = int.parse(type);
+
+    userProfile = User(
+      id: id,
+      mobileNumber: mobileNumber,
+      token: token,
+      type: userTypeConvertToEnum[userType]!,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,13 +162,19 @@ class _ChatInputFieldState extends State<ChatInputField> {
                                     isNewChat: widget.isNewChat,
                                     chatID: widget.userChatItemDTO.id,
                                     message: MessageDTO(
-                                      senderID: widget.message.senderID,
+                                      senderID: widget.message.senderID ==
+                                              userProfile.id
+                                          ? widget.message.senderID
+                                          : widget.message.receiverID,
                                       text: _messageController.text,
                                       chatID: widget.message.chatID,
                                       groupID: widget.message.groupID,
                                       senderMobileNumber:
                                           widget.message.senderMobileNumber,
-                                      receiverID: widget.message.receiverID,
+                                      receiverID: widget.message.receiverID ==
+                                              userProfile.id
+                                          ? widget.message.senderID
+                                          : widget.message.receiverID,
                                       receiverMobileNumber:
                                           widget.message.receiverMobileNumber,
                                       sentDateTime: widget.message.sentDateTime,
@@ -217,13 +249,20 @@ class _ChatInputFieldState extends State<ChatInputField> {
                                         chatID: widget.userChatItemDTO.id,
                                         message: MessageDTO(
                                           attachFile: widget.message.attachFile,
-                                          senderID: widget.message.senderID,
+                                          senderID: widget.message.senderID ==
+                                                  userProfile.id
+                                              ? widget.message.senderID
+                                              : widget.message.receiverID,
                                           text: _messageController.text,
                                           chatID: widget.message.chatID,
                                           groupID: widget.message.groupID,
                                           senderMobileNumber:
                                               widget.message.senderMobileNumber,
-                                          receiverID: widget.message.receiverID,
+                                          receiverID:
+                                              widget.message.receiverID ==
+                                                      userProfile.id
+                                                  ? widget.message.senderID
+                                                  : widget.message.receiverID,
                                           receiverMobileNumber: widget
                                               .message.receiverMobileNumber,
                                           sentDateTime:
